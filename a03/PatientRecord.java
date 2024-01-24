@@ -72,6 +72,11 @@ public class PatientRecord {
         // get gender
         // get first char
         gender = input("Please enter gender (M/F/O)").toLowerCase().charAt(0);
+        // validate gender is 'm' 'f' or 'o'
+        while (gender != 'm' && gender != 'f' && gender != 'o') {
+            System.out.println(gender + " is not a valid gender.");
+            gender = input("Please enter gender (M/F/O)").toLowerCase().charAt(0);
+        }
 
         // get birthMonth
         birthMonth = inputInt("Please enter birth month (1-12)");
@@ -114,7 +119,11 @@ public class PatientRecord {
         }
 
         // get allergies
-        allergies = input("Please enter all of your allergies in a list");
+        allergies = input("Please enter all of your allergies in a list (if any)");
+        // if the user just hits enter, set allergies to "none"
+        if (allergies.equals("")) {
+            allergies = "None";
+        }
 
         // get covidVaccinaed
         covidVaccinated = Boolean.parseBoolean(input("Are you vaccinated for covid? (Enter \"true\" or \"false\")"));
@@ -179,16 +188,18 @@ public class PatientRecord {
      */
     public static String getHeartRateMessage() {
         int age = calculateAge();
-        int maxHeartRate = 220 - age;
-        int targetHeartRateMin = (int) (maxHeartRate * 0.5);
-        int targetHeartRateMax = (int) (maxHeartRate * 0.85);
+        double maxHeartRate = 220.0 - (double) age;
+        double targetHeartRateMin = (maxHeartRate * 0.5);
+        double targetHeartRateMax = (maxHeartRate * 0.85);
 
-        String message = "Maximum heart rate is: " + maxHeartRate + ".\n\t"
-                + "Target Heart Range " + targetHeartRateMin + " - " + targetHeartRateMax;
+        String message = "Maximum heart rate is: " + String.format("%.1f", maxHeartRate) + ". "
+                + "Target heart rate is:  " + String.format("%.2f", targetHeartRateMin) + " - "
+                + String.format("%.2f", targetHeartRateMax);
+
         return message;
     }
 
-    /** 
+    /**
      * This method calculates the person's BMI as a double
      * according to the formula:
      * (weight * 703) / (height ^2)
@@ -199,7 +210,8 @@ public class PatientRecord {
     }
 
     /**
-     * This method produces a BMI chart, the user's BMI, and the category that it puts them in 
+     * This method produces a BMI chart, the user's BMI, and the category that it
+     * puts them in
      */
     public static String getBMIMessage() {
         double bmi = getBMI();
@@ -218,12 +230,14 @@ public class PatientRecord {
 
         String message = "BMI VALUES: \n";
 
+        // BMI chart given in Edstem
         message += "\tUnderweight: less than 18.5\n";
         message += "\tNormal: between 18.5 and 24.9\n";
-        message += "\tOverweight: between 25 and 29.9\n"; 
-        message += "\tObese: 30 or greater\n"; 
-        
-        message += "Patient's BMI is: " + String.format("%.1f", bmi) + ", which puts them in the " + bmiCategory + " category";
+        message += "\tOverweight: between 25 and 29.9\n";
+        message += "\tObese: 30 or greater\n";
+
+        message += "Patient's BMI is: " + String.format("%.1f", bmi) + ", which puts them in the " + bmiCategory
+                + " category\n";
 
         return message;
     }
@@ -238,20 +252,21 @@ public class PatientRecord {
         System.out.println();
     }
 
-
     /**
-     * This method prints a line with a "* " before it 
+     * This method prints a line with a "*" before it
      */
     public static void printLine(String line) {
         System.out.println("* " + line);
     }
 
     /**
-     * This method prints the full health record in a nice format 
+     * This method prints the full health record in a nice format
      * and warns the user if they need a covid vaccine
      */
     public static void printFullRecord() {
-        printAsterisks();  
+        printAsterisks();
+
+        // print the required health info
         printLine("Health Profile for " + firstName + " " + lastName);
         printLine("Gender: " + gender);
         printLine("DOB: " + birthMonth + "/" + birthDay + "/" + birthYear);
@@ -262,7 +277,7 @@ public class PatientRecord {
         printLine("Heart info: " + getHeartRateMessage());
         printLine("ALLERGIES: " + allergies);
         printLine("");
-        
+
         // alert the user if they need a covid vaccine
         if (!covidVaccinated) {
             printLine("ALERT: NEEDS COVID VACCINE");
@@ -270,11 +285,13 @@ public class PatientRecord {
             printLine("Vaccines are up to date");
         }
 
+        // print asterisks
         printAsterisks();
 
         // don't use printLine because we don't want asterisks
         System.out.print(getBMIMessage());
 
+        // print more asterisks
         printAsterisks();
     }
 
