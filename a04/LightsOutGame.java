@@ -14,7 +14,7 @@ public class LightsOutGame {
 
     // instance variables
     private boolean[] lightArray; // the array of booleans that represent the lights in the game.
-    private String displayType; // will be "simple line", "star grid" or "light emoji"
+    private String displayType; // will be "line", "grid" or "emoji"
     private Scanner sc; // to get user input from console
 
     // constants
@@ -52,16 +52,10 @@ public class LightsOutGame {
         }
     }
 
-    private String inputWord(String prompt) {
-        System.out.print(prompt + " : ");
-        String input = sc.nextLine();
-        return input;
-    }
-
     private int getNumLights() { // complete
-        System.out.println("⬛💡 Welcome to Light's Out! 💡 ⬛ ");
-        System.out.println("The objective is to turn all the lights off");
-        int choice = inputInt("How many lights would you like to have [3-15]?", 3, 15);
+        System.out.println("⬛ 💡 Welcome to Lights Out! 💡 ⬛");
+        System.out.println("The objective is to turn all the lights off.");
+        int choice = inputInt("How many lights would you like to have (3-15)?", 3, 15);
         return choice;
 
     }
@@ -78,10 +72,10 @@ public class LightsOutGame {
     }
 
     /**
-     * This method prints 4 spaces if the light is off, 4 asterisks if the light is
-     * on, all separated by |'s
+     * This method prints a singular line of lights, with each light separated by a
+     * |
      */
-    private void printLine() {
+    private void printSingleLine() {
         System.out.print("|");
         for (int i = 0; i < lightArray.length; i++) {
             if (lightArray[i]) {
@@ -91,6 +85,14 @@ public class LightsOutGame {
             }
         }
         System.out.println();
+    }
+
+    /**
+     * This method prints 4 spaces if the light is off, 4 asterisks if the light is
+     * on, all separated by |'s
+     */
+    private void printLine() {
+        printSingleLine();
         printNumbers();
     }
 
@@ -100,9 +102,9 @@ public class LightsOutGame {
     private void printEmoji() {
         for (int i = 0; i < lightArray.length; i++) {
             if (lightArray[i]) {
-                System.out.print(ON);
+                System.out.print(" " + ON + "  ");
             } else {
-                System.out.print(OFF);
+                System.out.print(" " + OFF + "  ");
             }
         }
         System.out.println();
@@ -115,80 +117,83 @@ public class LightsOutGame {
      * Each light is separated by a |
      */
     private void printGrid() {
-        for (int i = 0; i < lightArray.length; i++) {
-            if (lightArray[i]) {
-                System.out.print("****|");
-            } else {
-                System.out.print("    |");
-            }
-            if ((i + 1) % 4 == 0) {
-                System.out.println();
-            }
+        // calls printSingleLine 4 times, then prints the numbers
+        for (int i = 0; i < 4; i++) {
+            printSingleLine();
         }
+
         printNumbers();
     }
 
     /**
      * This method prints a line of numbers equal to lightArray's length, each
      * separated by 3 spaces (if the number is less than 10, it will have another
-     * space)
+     * space because it's only one digit)
      */
     private void printNumbers() {
         for (int i = 1; i <= lightArray.length; i++) {
             if (i < 10) {
-                System.out.print("  " + i + "   ");
+                System.out.print("  " + i + "  ");
             } else {
-                System.out.print(" " + i + "   ");
+                System.out.print("  " + i + " ");
             }
         }
         System.out.println();
     }
 
     public void play() {
-        // first, ask the user which light they want to select
-        // input of -1 causes the game to quit immediately
-        // if the user selects a light that is out of bounds, they are prompted to try
-        // again
 
-        int selectedLight = inputInt(
-                "Which light would you like to select? [1-" + lightArray.length + "] or -1 to quit", 1,
-                lightArray.length, -1) - 1; // subtract one because array indices start at 0
-
-        if (selectedLight == -1) {
-            System.out.println("Goodbye!");
-            System.exit(0);
-        }
-
-        // once a valid light number is selected, that light and its immediate neighbors
-        // are all toggled
-        for (int i = selectedLight - 1; i <= selectedLight + 1; i++) {
-            if (i >= 0 && i < lightArray.length) {
-                lightArray[i] = !lightArray[i];
-            }
-        }
-
-        // check if the user has won (if all the lights are off)
-        // if so, ask the user if they want to play again
-        // if not, gameplay continues
-        if (checkWin()) {
-            System.out.println("Congratulations! You've won!");
-            if (inputYesNo("Would you like to play again?")) {
-                makeNewBoard();
-            } else {
-                System.out.println("Goodbye!");
-                System.exit(0);
-            }
-        } else {
+        while (true) {
+            // show the game board
             displayGameBoard();
+
+            // put this here to handle the edge case of the user winning on the first move
+            // note that we don't put hasUserwon() in the while condition because we want to
+            // displaygameboard() no matter what
+            // the loop will keep running until the user wins or quits (and the break
+            // happens)
+            if (hasUserWon()) {
+                System.out.println("Congratulations! You've won!");
+                break;
+            }
+
+            // first, ask the user which light they want to select
+            // input of -1 causes the game to quit immediately
+            // if the user selects a light that is out of bounds, they are prompted to try
+            // again
+            int selectedLight = inputInt(
+                    "Which light would you like to select? (1-" + lightArray.length + ") or -1 to quit", 1,
+                    lightArray.length, -1);
+
+            if (selectedLight == -1) {
+                break;
+            }
+
+            selectedLight -= 1; // now, subtract one because array indices start at 0
+
+            // once a valid light number is selected, that light and its immediate neighbors
+            // are all toggled
+            for (int i = selectedLight - 1; i <= selectedLight + 1; i++) {
+                if (i >= 0 && i < lightArray.length) {
+                    lightArray[i] = !lightArray[i];
+                }
+            }
+        }
+
+        // put this condition here to ask the user if they want to play again when the while loop breaks
+        if (inputYesNo("Thank you for playing. Would you like to play again? (yes/y/no/n)")) {
+            makeNewBoard();
             play();
+        } else {
+            System.out.println("Goodbye!");
         }
 
     }
 
     /**
-     * This method checks if all the lights are off
+     * This method checks if all the lights are off (i.e., if the user has won)
      */
-    private boolean checkWin() {
+    private boolean hasUserWon() {
         for (int i = 0; i < lightArray.length; i++) {
             if (lightArray[i]) {
                 return false;
@@ -317,11 +322,11 @@ public class LightsOutGame {
      */
     public boolean inputYesNo(String prompt) {
         // Enter a loop to ask for a guess until a valid response (yes/no) is inputted
-        String input = inputWord(prompt);
+        String input = input(prompt);
         while (!(input.equalsIgnoreCase("Yes") || input.equalsIgnoreCase("Y")
                 || input.equalsIgnoreCase("N") || input.equalsIgnoreCase("No"))) { // not good
             System.out.println(input + " was Invalid, please type yes or no");
-            input = inputWord(prompt);
+            input = input(prompt);
         }
         return input.equalsIgnoreCase("Yes") || input.equalsIgnoreCase("Y"); // true for yes, false for no
     }
