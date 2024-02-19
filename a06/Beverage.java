@@ -21,11 +21,7 @@ public class Beverage {
     public Beverage(String name, char size) {
         this.name = name;
 
-        if (size == 'S' || size == 'M' || size == 'L') {
-            this.size = size;
-        } else {
-            this.size = 'L';
-        }
+        this.setSize(size);
 
         this.price = getPriceFromSize(this.size);
     }
@@ -66,6 +62,8 @@ public class Beverage {
     public void setSize(char size) {
         if (size == 'S' || size == 'M' || size == 'L') {
             this.size = size;
+        } else if (size == 's' || size == 'm' || size == 'l') {
+            this.size = Character.toUpperCase(size);
         } else {
             this.size = 'L';
         }
@@ -90,22 +88,23 @@ public class Beverage {
 
     // equals method
     public boolean equals(Beverage other) {
-        return this.name.equalsIgnoreCase(other.name) && this.size == other.size && Math.abs(this.price - other.price) < 0.01;
+        return this.name.equalsIgnoreCase(other.name) && this.size == other.size
+                && Math.abs(this.price - other.price) < 0.01;
     }
 
     // code for testing
     // public static void main(String[] args) {
-    //     // create two identical beverages, test if they're equal
-    //     Beverage b1 = new Beverage("Coffee", 'M');
-    //     Beverage b2 = new Beverage("Coffee", 'M');
-    //     Beverage b3 = new Beverage("Iced Tea", 'S');
-    //     Beverage b4 = new Beverage("Espresso", 'L');
-    //     System.out.println(b1.equals(b2)); // should print true
-    //     System.out.println(b1); // should print "Medium Coffee, $3.99"
+    // // create two identical beverages, test if they're equal
+    // Beverage b1 = new Beverage("Coffee", 'm');
+    // Beverage b2 = new Beverage("Coffee", 'M');
+    // Beverage b3 = new Beverage("Iced Tea", 's');
+    // Beverage b4 = new Beverage("Espresso", 'l');
+    // System.out.println(b1.equals(b2)); // should print true
+    // System.out.println(b1); // should print "Medium Coffee, $3.99"
 
-    //     System.out.println(b3);
-    //     System.out.println(b4);
-    //     System.out.println(b3.equals(b4)); // should print false
+    // System.out.println(b3);
+    // System.out.println(b4);
+    // System.out.println(b3.equals(b4)); // should print false
     // }
 
 }
