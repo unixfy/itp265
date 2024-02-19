@@ -6,6 +6,7 @@
  *         ITP 265, Spring 2024
  *         coffee Class Section
  **/
+
 public class BookTeaqueV1 {
     // create array of 3 books and 5 bevs
     public static Book[] books = new Book[3];
@@ -46,7 +47,7 @@ public class BookTeaqueV1 {
         System.out.println("Updating the size of drink four to large...");
         beverages[3].setSize('L');
         System.out.println("After updating size with mutator, drinkFour is now: " + beverages[3]);
-        // check if drinks are equal
+        // check if drinks are equal (first one should be false, second one should be true)
         System.out.println("Checking if drink 2 and 3 are equal: " + beverages[1].equals(beverages[2]));
         System.out.println(
                 "Checking if drink 1 and L sparkling water are equal: " + beverages[0].equals(new Beverage("Sparkling Water", 'L')));
