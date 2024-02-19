@@ -32,7 +32,7 @@ public class Book {
 
     // constructor w/ just title and author
     public Book(String title, String author) {
-        this(title, author, 9.99, "paperback", 5);
+        this(title, author, 9.99, "Paperback", 5);
     }
 
     // accessor for title
