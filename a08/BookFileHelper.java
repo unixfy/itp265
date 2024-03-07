@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 /**
- * Description of class
- * @author (your name)
- * email:
+ * This is a class to interact with the file system to read and write Books to a file.
+ * @author Alex Wang
+ * email: awang756@usc.edu
  * ITP 265,
- * @version (a version number or a date)
+ * @version Spring 2024
  */
  public class BookFileHelper{
 

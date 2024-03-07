@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 
 /**
- * Description of class
- * @author (your name)
- * email:
- * ITP 265, Fall 2023, _____ section
- * @version (a version number or a date)
+ * This is a class to implement our Bookteaque!
+ * @author Alex Wang
+ * email: awang756@usc.edu
+ * ITP 265,
+ * @version Spring 2024
  */
  public class BookTeaque{
 

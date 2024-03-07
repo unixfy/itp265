@@ -6,8 +6,8 @@ import java.time.*;
  * This class is meant to serve ITP 265 students as a help for getting input and error checking on input, but
  * may also be used as a general purpose class to store methods which may be needed across lots of projects.
  *
- * @author Kendra Walther and ________
- * @version Fall 2023
+ * @author Kendra Walther and Alex Wang
+ * @version Spring 2024
  */
  public class BFF{
      private Scanner sc; //declare
