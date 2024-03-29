@@ -18,10 +18,18 @@ public class Game {
     private NameGenerator ng;
     private static final int DEFAULT_NUM_BEINGS = 8;
 
-    public Game(){//complete
+    /**
+     * This constructor creates a game (calling the other constructor) with the default number of beings
+     */
+    public Game(){
 
         this(DEFAULT_NUM_BEINGS);
     }
+
+    /**
+     * This constructor creates a game with a specified number of beings & sets all the instance vars
+     * @param num the number of beings to be added to the game
+     */
     public Game(int num){ //complete
         bff = new BFF();
         rand = new Random();
@@ -48,6 +56,12 @@ public class Game {
 
         }
     }
+
+    /**
+     * Asks the user to specify vampire name, quarts of blood, starting form, and 2 favorite blood types
+     * and creates a new Vampire object using those inputs
+     * @return Vampire instance that was created
+     */
     private Vampire createVampire() { //complete
         String name = bff.input("Player, what is your vampire name?");
         int quarts = bff.inputInt("How many quarts of blood do you have (3-10)?", 3, 10);
@@ -58,6 +72,11 @@ public class Game {
         VampireForm form = VampireForm.valueOf(formStr.toUpperCase());
         return new Vampire(name, quarts, form, BloodType.matchString(type), BloodType.matchString(type2));
     }
+
+    /**
+     * Prints a nice stringified version of the computer players that were
+     * created in the generateComputerPlayers method
+     */
     private void printComputerPlayers(){ //complete
         bff.printRed("Your opponents: ");
         for(int i = 0; i < numBeings; i++){
@@ -67,6 +86,11 @@ public class Game {
         bff.printRed("There are " + numHumans + " humans and " +  (numBeings - numHumans) + " computer vampires" );
     }
 
+    /**
+     * Runs an infinite loop that is "broken" when the game is over (i.e., over=true)
+     * to repeatedly run rounds of the game; the player can input commands each round
+     * and the computer players will take their turns.
+     */
     public void play(){ //complete
         printComputerPlayers();
         bff.input("Hit return to continue");
@@ -97,6 +121,11 @@ public class Game {
         displayGameOver(quit, roundNum -1);
     }
 
+    /**
+     * This method shows the game over message, including interesting stats about all of the players
+     * @param playerQuits whether the player quit the game before it ended
+     * @param rounds the number of rounds that were played
+     */
     private void displayGameOver(boolean playerQuits, int rounds) { //complete
         bff.print("Game over after " + rounds + " rounds");
         String winner = "";
@@ -143,6 +172,11 @@ public class Game {
         return 0;
     }
 
+
+    /**
+     * Checks if the game has ended (either all humans are gone or the player has no points)
+     * @return whether the game has ended according to the defined criteria
+     */
     private boolean checkGameStatus() { //complete
         boolean gameOver = false;
         if(getNumberOfHumans() == 0){
