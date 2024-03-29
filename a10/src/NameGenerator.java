@@ -14,7 +14,7 @@ import java.util.Scanner;
  */
 public class NameGenerator {
     private static final String FILENAME_SHORT = "names.txt";
-    private static final String FILENAME_LONG = "/Users/kendra/Documents/code/itp265/answers/A08-userLogin/AssignmentSolutions/A09-VampireGame/src/names.txt";
+    private static final String FILENAME_LONG = "/workspace/itp265/a10/src/names.txt";
     private final ArrayList<String> allNames;
     private final Random r;
 
