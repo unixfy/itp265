@@ -11,7 +11,7 @@ public class Vampire extends Being {
     private final BloodType favBlood1;
     private final BloodType favBlood2;
 
-    public Vampire(String name, int quarts, String icon, VampireForm form, BloodType favBlood1, BloodType favBlood2) {
+    public Vampire(String name, int quarts, VampireForm form, BloodType favBlood1, BloodType favBlood2) {
         super(name, quarts, form.getEmoji());
         this.form = form;
         this.points = 10;
@@ -25,7 +25,7 @@ public class Vampire extends Being {
     }
 
     public Vampire(String name, int quarts, VampireForm form) {
-        this(name, quarts, form.getEmoji(), form, BloodType.getRandom(), BloodType.getRandom());
+        this(name, quarts, form, BloodType.getRandom(), BloodType.getRandom());
     }
 
     public Vampire(String name, int quarts) {
