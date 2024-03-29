@@ -1,3 +1,11 @@
+/**
+ * This is an enum that represents the different forms of a vampire. (from edstem)
+ *
+ * @author Alex Wang
+ * Spring 2024, ITP 265, coffee
+ * Email: awang756@usc.edu
+ */
+
 public enum VampireForm {
     VAMPIRE("🧛🏼", "Vampire", 3, 1, 2),
     VAMPIRE_BAT("🦇", "Vampire_Bat", 1, 2, 3),

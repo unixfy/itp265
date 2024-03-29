@@ -1,3 +1,11 @@
+/**
+ * This class represents a "human".
+ *
+ * @author Alex Wang
+ * Spring 2024, ITP 265, coffee
+ * Email: awang756@usc.edu
+ */
+
 public class Human extends Being {
 
     // holds the human's blood type

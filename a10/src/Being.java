@@ -1,3 +1,10 @@
+/**
+ * This class represents a generic "Being".
+ *
+ * @author Alex Wang
+ * Spring 2024, ITP 265, coffee
+ * Email: awang756@usc.edu
+ */
 public class Being {
     //    Since these two constants should be globally the same, it is safe to make them "static'
     public static final int DEFAULT_NUM_QUARTS = 5;

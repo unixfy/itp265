@@ -1,3 +1,10 @@
+/**
+ * This Enum is used to represent the different blood types that a person can have. (from edstem, mostly)
+ *
+ * @author Alex Wang
+ * Spring 2024, ITP 265, coffee
+ * Email: awang756@usc.edu
+ */
 public enum BloodType {
     O_POSITIVE("O+"),
     O_NEGATIVE("O-"),

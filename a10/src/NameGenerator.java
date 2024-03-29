@@ -8,7 +8,7 @@ import java.util.Scanner;
  * Simple class that reads a file of names and has a method to return a random name
  *
  * @author Kendra Walther
- * Fall 2023, ITP 265, My Section
+ * Spring 2024, ITP 265, coffee
  * Email: kwalther@usc.edu
  * Date Created: 10/30/23
  */
