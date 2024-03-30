@@ -28,7 +28,7 @@ public class Game {
     }
 
     /**
-     * This constructor creates a game with a specified number of beings & sets all the instance vars
+     * This constructor creates a game with a specified number of beings & sets all the (unset) instance vars
      *
      * @param num the number of beings to be added to the game
      */

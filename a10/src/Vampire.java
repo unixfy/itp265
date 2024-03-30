@@ -76,7 +76,7 @@ public class Vampire extends Being {
     }
 
     public void suckBlood() {
-        increaseQuarts(1);
+        super.increaseQuarts(1);
     }
 
     public String toString() {

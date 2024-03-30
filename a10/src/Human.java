@@ -19,18 +19,15 @@ public class Human extends Being {
     }
 
     public Human(String name, int quarts, BloodType bloodType) {
-        super(name, quarts);
-        this.bloodType = bloodType;
+        this(name, quarts, DEFAULT_EMOJI, bloodType);
     }
 
     public Human(String name, String icon, BloodType bloodType) {
-        super(name, icon);
-        this.bloodType = bloodType;
+        this(name, DEFAULT_NUM_QUARTS, icon, bloodType);
     }
 
     public Human(String name, BloodType bloodType) {
-        super(name);
-        this.bloodType = bloodType;
+        this(name, DEFAULT_NUM_QUARTS, DEFAULT_EMOJI, bloodType);
     }
 
     public BloodType getBloodType() {

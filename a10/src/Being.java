@@ -82,8 +82,9 @@ public class Being {
         if (quarts >= 0) {
             this.quarts = quarts;
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     protected void increaseQuarts(int num) {

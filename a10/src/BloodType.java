@@ -37,16 +37,16 @@ public enum BloodType {
     /**
      * Returns a random blood type, selected using Math.random()
      *
-     * @return an instance of BloodType with the random blood type selected
+     * @return an instance of BloodType with the random blood type that is selected
      */
     public static BloodType getRandom() {
         return BloodType.values()[(int) (Math.random() * BloodType.values().length)];
     }
 
     /**
-     * Returns a string array of all the different blood types defined in this enum
+     * Returns a string array of the "type" values of all the different blood types defined in this enum
      *
-     * @return a String array of all blood types
+     * @return a String array of all blood "type"s
      */
     public static String[] getBloodTypeStringsAsArray() {
         String[] array = new String[BloodType.values().length];
@@ -57,10 +57,10 @@ public enum BloodType {
     }
 
     /**
-     * Finds the BloodType instance with a type matching the given "type" string
+     * Finds the BloodType instance with a type matching the provided "type" string
      *
      * @param type the "type" string to match
-     * @return the BloodType instance that matches the given string
+     * @return the BloodType instance whose "type" matches the given string
      */
     public static BloodType matchString(String type) {
         BloodType bType = O_NEGATIVE;
