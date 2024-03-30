@@ -80,7 +80,7 @@ public class Vampire extends Being {
     }
 
     public String toString() {
-        return "Vampire " + super.toString();
+        return this.getForm().getForm() + " " + super.toString();
     }
 
     //    from edStem

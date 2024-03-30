@@ -155,7 +155,7 @@ public class Game {
                 npcActions();
                 mysteryEvent();
                 over = checkGameStatus();
-                if (bff.inputYesNo("Want to print opponents stats (it costs 1 point?")) {
+                if (bff.inputYesNo("Want to print opponents stats (it costs 1 point?)")) {
                     printComputerPlayers();
                     player.losePoints(1);
                 }
@@ -337,17 +337,10 @@ public class Game {
 
     private void change() {
         // ask the player what form they want to chang eto
-        String desiredForm = bff.input("What form would you like to change to?", "Vampire", "Bat", "Wolf");
+        String desiredForm =  bff.input("What form do you want to change to? (Vampire, Vampire_Bat, Vampire_Wolf)", "Vampire", "Vampire_Bat", "Vampire_Wolf");
 
         // change the form depending on the user input
-        switch (desiredForm) {
-            case "Vampire":
-                player.changeForm(VampireForm.VAMPIRE);
-            case "Bat":
-                player.changeForm(VampireForm.VAMPIRE_BAT);
-            case "Wolf":
-                player.changeForm(VampireForm.VAMPIRE_WOLF);
-        }
+        player.changeForm(VampireForm.valueOf(desiredForm.toUpperCase()));
     }
 
     private void rest() {
@@ -439,23 +432,24 @@ public class Game {
     private void vampireFaceOff(Vampire attacker, Vampire other) {
         String display = ("It's a VAMPIRE face-off\n" + attacker.getName() + " the " + attacker.getIcon() + " versus " + other.getName() + " the " + other.getIcon());
 
-//        if the attacker or other are the player, we print a message; otherwise it's optioanl
-        if (attacker == player || other == player) {
-            bff.printRed(display);
-        }
+        bff.print(display);
+        String playerMessage = "";
 
         if (attacker.getForm() == other.getForm()) {
 //            tie case
             attacker.losePoints(1);
             other.losePoints(1);
+            playerMessage = "It's a tie, both lose 1 point!";
         } else if (VampireForm.getWinner(attacker.getForm(), other.getForm()) == attacker.getForm()) {
             //            attacker wins
             attacker.earnPoints(2);
             other.losePoints(2);
+            playerMessage = attacker.getName() + " wins! +2 points for " + attacker.getName();
         } else if (VampireForm.getWinner(attacker.getForm(), other.getForm()) == other.getForm()) {
             //            other wins
             attacker.losePoints(2);
             other.earnPoints(2);
+            playerMessage = other.getName() + " wins! +2 points for " + other.getName();
         }
         // finish this based on rock-paper-scissor rules (Comparing forms)
         // NOTICE: there is a helper function in VampireForm that will get winning form.
@@ -464,6 +458,11 @@ public class Game {
 
         //if attacker or other is  the player,  print  message from the point of player
         //otherwise a message is optional.
+
+        //        if the attacker or other are the player, we print a message; otherwise it's optioanl
+        if (attacker == player || other == player) {
+            bff.printRed(playerMessage);
+        }
     }
 
     private void removeBeingFromArray(int num) {

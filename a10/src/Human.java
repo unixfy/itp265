@@ -49,6 +49,6 @@ public class Human extends Being {
     @Override
     public String toString() {
 //        to reduce code repetition
-        return super.toString() + " of blood type " + bloodType;
+        return super.toString() + " of blood type " + bloodType.getType();
     }
 }
