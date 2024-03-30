@@ -370,6 +370,7 @@ public class Game {
         attackBy(player);
     }
 
+    @SuppressWarnings("PatternVariableCanBeUsed")
     private void attackBy(Vampire hunter) {
         // choose a random computerPlayer (equal odds)
         // if NPC is a Vampire, do vampireFaceOff
@@ -384,11 +385,12 @@ public class Game {
         int victimIndex = rand.nextInt(numBeings); // gets an index of a random player
         Being victim = computerPlayers[victimIndex]; // gets the player at that index
 
-        if (victim instanceof Vampire vampireVictim) {
+        if (victim instanceof Vampire) {
+            Vampire vampireVictim = (Vampire) victim;
             vampireFaceOff(vampireVictim, hunter);
-        } else if (victim instanceof Human humanVictim) {
+        } else if (victim instanceof Human) {
             int amount;
-
+            Human humanVictim = (Human) victim;
             if (humanVictim.getBloodType().equals(hunter.getFavBlood1())) {
                 amount = 3;
             } else if (humanVictim.getBloodType().equals(hunter.getFavBlood2())) {
