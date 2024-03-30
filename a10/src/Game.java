@@ -9,31 +9,32 @@ import java.util.Random;
  * Email: awang756@usc.edu
  */
 public class Game {
-    private Being[] computerPlayers; //a Being array holding the non-player Being objects - either Human or Vampire objects
-    private ArrayList<Vampire> allVampires; // all the vampires (player + computer vampire players)
-    private int numBeings; // number of filled spots in the computerPlayer array
-    private Vampire player; // the program user
-    private BFF bff;
-    private Random rand;
-    private NameGenerator ng;
     private static final int DEFAULT_NUM_BEINGS = 8;
+    private final Being[] computerPlayers; //a Being array holding the non-player Being objects - either Human or Vampire objects
+    private final ArrayList<Vampire> allVampires; // all the vampires (player + computer vampire players)
+    private int numBeings; // number of filled spots in the computerPlayer array
+    private final Vampire player; // the program user
+    private final BFF bff;
+    private final Random rand;
+    private final NameGenerator ng;
 
     /**
      * This constructor creates a game (calling the other constructor) with the default number of beings
      */
-    public Game(){
+    public Game() {
 
         this(DEFAULT_NUM_BEINGS);
     }
 
     /**
      * This constructor creates a game with a specified number of beings & sets all the instance vars
+     *
      * @param num the number of beings to be added to the game
      */
-    public Game(int num){ //complete
+    public Game(int num) { //complete
         bff = new BFF();
         rand = new Random();
-        ng  = new NameGenerator();
+        ng = new NameGenerator();
         allVampires = new ArrayList<>();
         computerPlayers = new Being[num];
         numBeings = num;
@@ -43,16 +44,48 @@ public class Game {
         generateComputerPlayers();
     }
 
-    private void generateComputerPlayers(){
-        for(int i = 0; i < computerPlayers.length; i++) {
-            Being being = null;
+    /**
+     * Starts the whole program
+     *
+     * @param args command line arguments
+     */
+    public static void main(String[] args) { //complete
+        new Game().play();
+    }
+
+    private void generateComputerPlayers() {
+        for (int i = 0; i < computerPlayers.length; i++) {
+            Being being;
             String name = ng.getRandomName();
-            //TODO: finish. 60% probability of making a human, else make a vampire
+            // 60% probability of making a human, else make a vampire
             // random starting quarts 3-10
             // humans should get a random BloodType from the enum
             // vampires will get a random form.
 
-            //TODO: Make sure to add vampire to the computerPlayers array AND the allVampires list
+            // get a random number between 0 and 99
+            int probability = getRandomProbability();
+
+            // 60% chance of human
+            if (probability < 60) {
+                // get random bloodtype
+                BloodType type = BloodType.getRandom();
+                being = new Human(name, rand.nextInt(8) + 3, type);
+            } else {
+                // create a vampire
+                VampireForm form = VampireForm.getRandom();
+                BloodType type1 = BloodType.getRandom();
+                BloodType type2 = BloodType.getRandom();
+                being = new Vampire(name, rand.nextInt(8) + 3, form, type1, type2);
+
+                // vampires must be added to allVampires
+                // note we need to cast Being to Vampire to add it to the list
+                allVampires.add((Vampire) being);
+            }
+
+            // add the being to the computerPlayers array
+            computerPlayers[i] = being;
+
+            // Make sure to add vampire to the computerPlayers array AND the allVampires list
 
         }
     }
@@ -60,6 +93,7 @@ public class Game {
     /**
      * Asks the user to specify vampire name, quarts of blood, starting form, and 2 favorite blood types
      * and creates a new Vampire object using those inputs
+     *
      * @return Vampire instance that was created
      */
     private Vampire createVampire() { //complete
@@ -77,13 +111,13 @@ public class Game {
      * Prints a nice stringified version of the computer players that were
      * created in the generateComputerPlayers method
      */
-    private void printComputerPlayers(){ //complete
+    private void printComputerPlayers() { //complete
         bff.printRed("Your opponents: ");
-        for(int i = 0; i < numBeings; i++){
+        for (int i = 0; i < numBeings; i++) {
             bff.print(i + ": " + computerPlayers[i]);
         }
         int numHumans = getNumberOfHumans();
-        bff.printRed("There are " + numHumans + " humans and " +  (numBeings - numHumans) + " computer vampires" );
+        bff.printRed("There are " + numHumans + " humans and " + (numBeings - numHumans) + " computer vampires");
     }
 
     /**
@@ -91,7 +125,7 @@ public class Game {
      * to repeatedly run rounds of the game; the player can input commands each round
      * and the computer players will take their turns.
      */
-    public void play(){ //complete
+    public void play() { //complete
         printComputerPlayers();
         bff.input("Hit return to continue");
         displayInstructions();
@@ -99,59 +133,67 @@ public class Game {
         int roundNum = 1;
         boolean over = false;
         boolean quit = false;
-        while(!over){
-            String command =  bff.input("Round #" +  roundNum + ": " + player.getName() + " Enter command >", "Rest", "Attack", "Change", "Quit");
-            switch(command.toLowerCase()){
-                case "rest": rest(); break;
-                case "attack": attack(); break;
-                case "change": change(); break;
-                case "quit": quit = true; over = true; break;
+        while (!over) {
+            String command = bff.input("Round #" + roundNum + ": " + player.getName() + " Enter command >", "Rest", "Attack", "Change", "Quit");
+            switch (command.toLowerCase()) {
+                case "rest":
+                    rest();
+                    break;
+                case "attack":
+                    attack();
+                    break;
+                case "change":
+                    change();
+                    break;
+                case "quit":
+                    quit = true;
+                    over = true;
+                    break;
             }
-            if(!quit) {
+            if (!quit) {
                 npcActions();
                 mysteryEvent();
-                over=checkGameStatus();
-                if(bff.inputYesNo("Want to print opponents stats (it costs 1 point?")){
+                over = checkGameStatus();
+                if (bff.inputYesNo("Want to print opponents stats (it costs 1 point?")) {
                     printComputerPlayers();
                     player.losePoints(1);
                 }
             }
             roundNum++;
         }
-        displayGameOver(quit, roundNum -1);
+        displayGameOver(quit, roundNum - 1);
     }
 
     /**
      * This method shows the game over message, including interesting stats about all of the players
+     *
      * @param playerQuits whether the player quit the game before it ended
-     * @param rounds the number of rounds that were played
+     * @param rounds      the number of rounds that were played
      */
     private void displayGameOver(boolean playerQuits, int rounds) { //complete
         bff.print("Game over after " + rounds + " rounds");
         String winner = "";
-        if(playerQuits){
+        if (playerQuits) {
             bff.print("Player quit... but here are the ending stats:\n");
         }
         bff.print("Here is how each vampire scored:");
         rankVampiresInList();
-        for(Vampire v: allVampires){
-            if(v == player){
-                bff.printRed("\tYOU: " + v );
+        for (Vampire v : allVampires) {
+            if (v == player) {
+                bff.printRed("\tYOU: " + v);
             }
             bff.print("\t" + v);
         }
-        if(getNumberOfHumans() == 0){
+        if (getNumberOfHumans() == 0) {
             bff.print("The VAMPIRES win, no humans remain\n");
             bff.printRed("Congratulations to top scoring Vampire: " + allVampires.get(0));
-        }
-        else if(player.getPoints() == 0){
+        } else if (player.getPoints() == 0) {
             bff.print("The HUMANS win.\n");
-        }
-        else{
+        } else {
             bff.print(getNumberOfHumans() + " Humans remain...Congratulations to top scoring Vampire(s):");
             int index = 1;
             String top = allVampires.get(0).toString();
-            while(allVampires.get(index).getPoints() == allVampires.get(0).getPoints() && index < allVampires.size()){
+            while (allVampires.get(index).getPoints() == allVampires.get(0).getPoints() && index < allVampires.size()) {
                 top += "\n and " + allVampires.get(index).toString();
                 index++;
             }
@@ -166,23 +208,32 @@ public class Game {
         allVampires.sort((Vampire v1, Vampire v2) -> v2.getPoints() - v1.getPoints());
     }
 
-    private int getNumberOfHumans(){
-        //TODO
-        bff.printRed("getNumberOfHumans is not implemented yet.");
-        return 0;
-    }
+    /**
+     * Returns the number of humans in computerPlayers
+     *
+     * @return the number of humans in computerPlayers
+     */
+    private int getNumberOfHumans() {
+        int counter = 0;
 
+        for (Being player : computerPlayers) {
+            // just increase the counter if the player is a human
+            if (player instanceof Human) {
+                counter++;
+            }
+        }
+
+        return counter;
+    }
 
     /**
      * Checks if the game has ended (either all humans are gone or the player has no points)
+     *
      * @return whether the game has ended according to the defined criteria
      */
     private boolean checkGameStatus() { //complete
-        boolean gameOver = false;
-        if(getNumberOfHumans() == 0){
-            gameOver = true;
-        }
-        if(player.getPoints() == 0){
+        boolean gameOver = getNumberOfHumans() == 0;
+        if (player.getPoints() == 0) {
             gameOver = true;
         }
         return gameOver;
@@ -191,24 +242,50 @@ public class Game {
     private void npcActions() { //Non player characters perform actions.
         int numHumans = getNumberOfHumans();
         bff.printFancy("Computer beings (the humans and vampires) take their turns.\n There are " + numHumans +
-                " humans and " +  (numBeings - numHumans) + " computer vampires" );
+                " humans and " + (numBeings - numHumans) + " computer vampires");
 
-        //TODO: Finish this method. Loop through all the computerPlayers, Use random number to make game more fun
-        //if npc is human, there's a 3/10 chance that they can increase blood quarts by 1.
+        // Finish this method. Loop through all the computerPlayers, Use random number to make game more fun
+        // if npc is human, there's a 3/10 chance that they can increase blood quarts by 1.
         // if npc is a vampire, there is a 50% chance that the vampire attacks another player and a
         // 50% chance that they change form.
 
+        for (Being player : computerPlayers) {
+            // generate random number for probability
+            // I'm assuming this is what the instructions mean by "use random number to make game more fun"???
+            int probability = getRandomProbability();
+
+            if (player instanceof Human) {
+                if (probability < 30) {
+                    player.increaseQuarts(1);
+                }
+            } else if (player instanceof Vampire) {
+//                (i'm assuming the two scenarios listed above are mutually exclusive, since it doesn't say)
+                if (probability < 50) {
+                    attackBy((Vampire) player);
+                } else {
+//                    need to cast to Vampire to call changeForm
+                    ((Vampire) player).changeForm();
+                }
+            }
+        }
     }
 
+    /**
+     * MYSTERY EVENT!!
+     * With a 30% chance, the mystery event causes a random computer player to eisappear
+     * With a 20% chance, the human attacks vampires with garlic
+     * With a 20% chance, the human attacks vampires with a cross
+     * With a 20% chance, the human attacks vampires with sunlight
+     * With a 10% chance, the human gets 3 points
+     * In any of the last 4 events, the player is told how many points they have
+     */
     private void mysteryEvent() { //complete
-        int probability = rand.nextInt(100);
-        if (probability > 70)  { //30% change
+        int probability = getRandomProbability();
+        if (probability > 70) { //30% change
             int num = rand.nextInt(numBeings);
             bff.printRed("❓Mystery event causes a computer player to disappear... Goodbye " + computerPlayers[num].getName());
             removeBeingFromArray(num);
-        }
-        else {
-            int damage = 0;
+        } else {
             if (probability >= 0 & probability < 20) {
                 humanAttackVampires("garlic");
             } else if (probability >= 20 & probability < 40) {
@@ -223,15 +300,21 @@ public class Game {
             bff.printRed("You are a " + player.getIcon() + " with " + player.getPoints() + " points");
         }
     }
-    private void humanAttackVampires(String item){  //complete
+
+    /**
+     * This method allows human to attack a random number of random vampires (1-3) with garlic, a cross, or sunlight
+     * The amount of damage caused depends on the type of the vampire(s) attacked
+     * The amount of damage taken is printed
+     *
+     * @param item the item used to attack the vampires (garlic, cross, sunlight)
+     */
+    private void humanAttackVampires(String item) {  //complete
         int numberOfAttacks = rand.nextInt(2) + 1; // attacks 1, 2, or 3 vampires.
         boolean playerAttacked = false;
-        for(int i = 0; i < numberOfAttacks; i++) {
+        for (int i = 0; i < numberOfAttacks; i++) {
             Vampire v = allVampires.get(rand.nextInt(allVampires.size()));
-            if(playerAttacked && v == player){
-                // player was already attacked, don't double hit the same player
-            }
-            else {
+//            if the player was already attacked, we don't hit them again
+            if (!playerAttacked || v != player) {
                 int damage = v.getForm().getDamage(item);
                 v.losePoints(damage);
                 if (v == player) { //only print attacks to the player.
@@ -242,64 +325,136 @@ public class Game {
                         bff.printRed("Mystery Event: ✝️ A Human yields a cross at you ✝️. You lose " + damage + " points.");
                     else if (item.equalsIgnoreCase("sunlight"))
                         bff.printRed("Mystery Event: ☀️️☀️☀️ The sun hits you ️️☀️☀️☀️. You lose " + damage + " points.");
-                }
-                else{
+                } else {
                     bff.print(v.getDisplay() + " took damage of " + damage);
                 }
+            } else {
+                // player was already attacked, don't double hit the same player
             }
         }
     }
+
     private void change() {
-        //TODO - player chooses a different vampire form to take.
+        // ask the player what form they want to chang eto
+        String desiredForm = bff.input("What form would you like to change to?", "Vampire", "Bat", "Wolf");
+
+        // change the form depending on the user input
+        switch (desiredForm) {
+            case "Vampire":
+                player.changeForm(VampireForm.VAMPIRE);
+            case "Bat":
+                player.changeForm(VampireForm.VAMPIRE_BAT);
+            case "Wolf":
+                player.changeForm(VampireForm.VAMPIRE_WOLF);
+        }
     }
 
-    private void rest(){
-        //TODO 50% chance to rest and get a point, 50% to not sleep. (no Points)
-        //  bff.print("You take a rest in your coffin ⚰️ and rejuvenate. +1 point");
-        // bff.print("It is too noisy to sleep");
+    private void rest() {
+        int probability = getRandomProbability();
+        // 50% chance to rest and get a point, 50% to not sleep. (no Points)
+
+        if (probability < 50) {
+            player.earnPoints(1);
+            bff.print("You take a rest in your coffin ⚰️ and rejuvenate. +1 point");
+        } else {
+            bff.print("You can't sleep :(");
+        }
     }
+
+    /**
+     * when the player is a vampire, they can use this method to attack
+     */
     private void attack() { //complete
         bff.print("You have chosen to attack... \n\tYou start to search for your victim");
         attackBy(player);
     }
 
     private void attackBy(Vampire hunter) {
-        //TODO: choose a random computerPlayer (equal odds)
+        // choose a random computerPlayer (equal odds)
         // if NPC is a Vampire, do vampireFaceOff
         // if NPC is a Human, print the victim's info
         // then the hunter will suck their blood -- use the suck(Vampire, Human, int) method
         // 1 quart if it is a non-preferred blood type
         // 2 quarts for favBlood2 type
         // 3 quarts for favBlood1 type
-        //TODO: next figure out if the human is still alive
+        // next figure out if the human is still alive
         // if not, removeBeingFromArray and award the hunter 3 points.
 
-        //TODO: Uncomment this at the end to have a nice print message for when the player is the hunter
-        /*
-            if(hunter == player){
-                String s = h.toString(); // the human to string
-                if(!alive) {
-                    s = "You drained the life from " + h.getName() + " and they have been removed from the game";
-                }
-                bff.printRed("🩸 Wasn't that human delicious? You drank 🩸 " + amt + " quarts from human: " +  s);
-              }
-            else{
-                bff.print(hunter.getIcon() + " " + hunter.getName() + " drinks 🩸 " + amt + " quarts from human " + h);
+        int victimIndex = rand.nextInt(numBeings); // gets an index of a random player
+        Being victim = computerPlayers[victimIndex]; // gets the player at that index
+
+        if (victim instanceof Vampire vampireVictim) {
+            vampireFaceOff(vampireVictim, hunter);
+        } else if (victim instanceof Human humanVictim) {
+            int amount;
+
+            if (humanVictim.getBloodType().equals(hunter.getFavBlood1())) {
+                amount = 3;
+            } else if (humanVictim.getBloodType().equals(hunter.getFavBlood2())) {
+                amount = 2;
+            } else {
+                amount = 1;
             }
-        }*/
+
+            suck(hunter, humanVictim, amount);
+
+            // check if human is still alive
+            boolean alive = assessIfAlive(humanVictim);
+            if (!alive) {
+                removeBeingFromArray(victimIndex);
+                hunter.earnPoints(3);
+            }
+
+            if (hunter == player) {
+                String s = humanVictim.toString(); // the human to string
+                if (!alive) {
+                    s = "You drained the life from " + humanVictim.getName() + " and they have been removed from the game";
+                }
+                bff.printRed("🩸 Wasn't that human delicious? You drank 🩸 " + amount + " quarts from human: " + s);
+            } else {
+                bff.print(hunter.getIcon() + " " + hunter.getName() + " drinks 🩸 " + amount + " quarts from human " + humanVictim);
+            }
+
+        }
     }
 
     private int suck(Vampire hunter, Human human, int numQuarts) {
         int count = 0;
-        //TODO: the vampire tries to drink up to numQuarts, 1 quart at a time.
+        // the vampire tries to drink up to numQuarts, 1 quart at a time.
         // Loop numQuarts times. If suckBlood call on the human returns true, count it and call vampire's suck blood
+
+        for (int i = 0; i < numQuarts; i++) {
+            if (human.suckBlood()) {
+                hunter.suckBlood();
+                count++;
+            }
+        }
+
         return count; //number of quarts successfully drained from human
     }
 
     private void vampireFaceOff(Vampire attacker, Vampire other) {
         String display = ("It's a VAMPIRE face-off\n" + attacker.getName() + " the " + attacker.getIcon() + " versus " + other.getName() + " the " + other.getIcon());
 
-        //TODO: finish this based on rock-paper-scissor rules (Comparing forms)
+//        if the attacker or other are the player, we print a message; otherwise it's optioanl
+        if (attacker == player || other == player) {
+            bff.printRed(display);
+        }
+
+        if (attacker.getForm() == other.getForm()) {
+//            tie case
+            attacker.losePoints(1);
+            other.losePoints(1);
+        } else if (VampireForm.getWinner(attacker.getForm(), other.getForm()) == attacker.getForm()) {
+            //            attacker wins
+            attacker.earnPoints(2);
+            other.losePoints(2);
+        } else if (VampireForm.getWinner(attacker.getForm(), other.getForm()) == other.getForm()) {
+            //            other wins
+            attacker.losePoints(2);
+            other.earnPoints(2);
+        }
+        // finish this based on rock-paper-scissor rules (Comparing forms)
         // NOTICE: there is a helper function in VampireForm that will get winning form.
         //if attacker and other are the same, it's a tie, and both lose 1 point.
         //otherwise winner gets 2 points, loser loses 2 points
@@ -308,20 +463,43 @@ public class Game {
         //otherwise a message is optional.
     }
 
-
     private void removeBeingFromArray(int num) {
-
         Being goner = computerPlayers[num];
-        //TODO: remove being from the array. Array can stay the same size, but numBeings will be 1 less
+        // remove being from the array. Array can stay the same size, but numBeings will be 1 less
         // and all Being objects get shifted to the left to not leave a gap
         // if the goner is a Vampire, also delete from the list of allVampires.
+        if (goner instanceof Vampire) {
+            allVampires.remove(goner);
+        }
+
+        // drop goner
+        computerPlayers[num] = null;
+
+
+//        this shifts everything to the left starting fromt he index of the goner
+        for (int i = num + 1; i < numBeings - 1; i++) {
+            computerPlayers[i - 1] = computerPlayers[i];
+        }
+
+        // decrement numBeings
+        numBeings--;
+
     }
 
     private boolean assessIfAlive(Human h) {
-        //TODO: return true if human is alive
+        // return true if human is alive
         // otherwise print human's name with a message that they have been sucked dry AND return false;
         boolean alive = true;
+
+        if (h.getQuarts() <= 0) {
+            System.out.println(h.getName() + " has been sucked dry.");
+            alive = false;
+        }
         return alive;
+    }
+
+    private int getRandomProbability() {
+        return rand.nextInt(100);
     }
 
     /**
@@ -345,19 +523,5 @@ public class Game {
     private void displayInstructions() { //complete
         bff.print("This game runs by string commands: you can type the following: "
                 + "\n\tRest (which might increase health points)" + "\n\tAttack (Randomly attack a computer player)" + "\n\tChange (to switch form)" + "\n\tQuit (to end game)");
-    }
-
-
-
-
-
-
-
-    /**
-     * Starts the whole program
-     * @param args
-     */
-    public static void main(String[] args) { //complete
-        new Game().play();
     }
 }
