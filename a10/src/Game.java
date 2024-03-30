@@ -8,15 +8,16 @@ import java.util.Random;
  * Spring 2024, ITP 265, coffee
  * Email: awang756@usc.edu
  */
+@SuppressWarnings("FieldMayBeFinal")
 public class Game {
     private static final int DEFAULT_NUM_BEINGS = 8;
-    private final Being[] computerPlayers; //a Being array holding the non-player Being objects - either Human or Vampire objects
-    private final ArrayList<Vampire> allVampires; // all the vampires (player + computer vampire players)
+    private Being[] computerPlayers; //a Being array holding the non-player Being objects - either Human or Vampire objects
+    private ArrayList<Vampire> allVampires; // all the vampires (player + computer vampire players)
     private int numBeings; // number of filled spots in the computerPlayer array
-    private final Vampire player; // the program user
-    private final BFF bff;
-    private final Random rand;
-    private final NameGenerator ng;
+    private Vampire player; // the program user
+    private BFF bff;
+    private Random rand;
+    private NameGenerator ng;
 
     /**
      * This constructor creates a game (calling the other constructor) with the default number of beings
