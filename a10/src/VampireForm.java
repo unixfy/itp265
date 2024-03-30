@@ -24,8 +24,8 @@ public enum VampireForm {
         this.sunlightDamage = sun;
     }
 
-    public static VampireForm getRandom(){
-        return VampireForm.values()[(int)(Math.random() * VampireForm.values().length)];
+    public static VampireForm getRandom() {
+        return VampireForm.values()[(int) (Math.random() * VampireForm.values().length)];
     }
 
     public static VampireForm getWinner(VampireForm p1, VampireForm p2) {
