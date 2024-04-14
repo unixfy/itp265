@@ -44,10 +44,10 @@ public abstract class StreamableProduct extends Product {
 
     @Override
     public String toString() {
-        return "StreamableProduct{" +
-                "isIncludedWithPrime=" + isIncludedWithPrime +
-                ", duration=" + duration +
-                ", releaseYear=" + releaseYear +
-                '}';
+        String returnString = "Streamable" + getClass().getSimpleName();
+        if (isIncludedWithPrime) {
+            returnString += " (Included with Prime)";
+        }
+        return returnString + " " + super.toString();
     }
 }

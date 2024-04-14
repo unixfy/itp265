@@ -25,8 +25,6 @@ public class Games extends Item {
 
     @Override
     public String toString() {
-        return "Games{" +
-                "description='" + description + '\'' +
-                '}';
+        return super.toString() + ", description:" + description;
     }
 }

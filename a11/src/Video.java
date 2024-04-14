@@ -24,13 +24,16 @@ public class Video extends StreamableProduct implements Rentable {
 
     @Override
     public String toString() {
-        return "Video{" +
-                "genre=" + genre +
-                '}';
+        return super.toString() + ", genre: " + genre;
     }
 
     @Override
     public double getRentalPrice() {
-        return 0;
+        //The videos rental price will be the regular price divided by 3, or $0.00 if the video is included with prime
+        if (this.isIncludedWithPrime()) {
+            return 0.00;
+        } else {
+            return this.getPrice() / 3.0;
+        }
     }
 }

@@ -16,8 +16,6 @@ public class Music extends StreamableProduct {
 
     @Override
     public String toString() {
-        return "Music{" +
-                "musicGenre=" + musicGenre +
-                '}';
+        return super.toString() + ", genre: " + musicGenre;
     }
 }

@@ -31,10 +31,7 @@ public class Book extends Item implements Rentable {
 
     @Override
     public String toString() {
-        return "Book{" +
-                "genre='" + genre + '\'' +
-                ", numberOfPages=" + numberOfPages +
-                ", RENTAL_PRICE=" + RENTAL_PRICE +
-                '}';
+        return super.toString() +
+                ", genre: " + getGenre() + ", number of pages: " + getNumberOfPages() + ", rental price: $" + getRentalPrice();
     }
 }
