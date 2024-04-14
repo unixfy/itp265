@@ -23,11 +23,17 @@ public class ProductTester {
     }
 
     public void setUpMapOfProducts(){
-        //TODO
         // setting up by map keys. USE producttype enum to set up the keys, each going to a new empty list
+        for (ProductType productType : ProductType.values()) {
+            inventoryMap.put(productType, new ArrayList<>());
+        }
 
+        for (Product product : allProducts) {
+            ProductType productType = ProductType.getProductType(product.getClass().getSimpleName());
+            List<Product> productTypeList = inventoryMap.get(productType);
+            productTypeList.add(product);
+        }
         //After that, organize each Product by storing it in the list associated with its product type
-        //ProductType pType = ProductType.getProductType(<THING>.getClass().getSimpleName());
 
     }
 
@@ -52,20 +58,40 @@ public class ProductTester {
     }
 
     public void showAll() { //for Test 0
-
+        // loop through allProducts and print each product's toString
+        for (Product p : allProducts) {
+            System.out.println(p);
+        }
     }
     public void printProductPriceAndName() { //for Test 1 and 2
         //String friendly = String.format("$%.2f", p.getPrice());
         // Loops through allProducts, print $2.99 Product Name (Rating/5.0)
+        for (Product p : allProducts) {
+            System.out.printf("$%.2f : %s (%.1f/5.0)%n", p.getPrice(), p.getName(), p.getRating());
+        }
 
     }
 
     public void showInventoryByCategory() { //Test 3
-        //TODO: Use the map and print each key -- the ProductType (or category)
+        // Use the map and print each key -- the ProductType (or category)
         // if the list for that product is empty, print "\tNo matching items"
         // if list is not empty, sort it before looping through to print contents
         // otherwise  print the list contents, one per line with a tab followed by the product's toString result
+        for (ProductType productType : inventoryMap.keySet()) {
+            System.out.println(productType);
+            List<Product> productTypeList = inventoryMap.get(productType);
 
+            // nice method for List!
+            if (productTypeList.isEmpty()) {
+                System.out.println("\tNo matching items");
+            } else {
+                // another useful method to sort everything inside a list
+                Collections.sort(productTypeList);
+                for (Product p : productTypeList) {
+                    System.out.println("\t" + p);
+                }
+            }
+        }
     }
 
 
@@ -73,6 +99,14 @@ public class ProductTester {
         // loop through all the products and see if a given product is Rentable
         // print each rentable product in the form, with rental price and name of product
         //(Rent from : $0.00) - Psych
+        for (Product p : allProducts) {
+            // something is rentable if it is an instanceof Rentable interface
+            if (p instanceof Rentable) {
+                // must cast to Rentable to get the rental price
+                @SuppressWarnings("PatternVariableCanBeUsed") Rentable rentable = (Rentable) p;
+                System.out.printf("(Rent from : $%.2f) - %s%n", rentable.getRentalPrice(), p.getName());
+            }
+        }
 
     }
 
