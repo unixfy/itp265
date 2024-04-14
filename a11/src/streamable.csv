@@ -1,0 +1,17 @@
+Type,Product Type,Name,Price,Rating,Duration,withPrime,releaseYear,Other Data
+Streamable,Video,Psych,9.99,5,40,TRUE,2006,COMEDY
+Streamable,Video,Suits,9.99,5,43,TRUE,2011,DRAMA
+Streamable,Video,Green Book,14.99,4.5,130,FALSE,2018,DRAMA
+Streamable,Music,Hang on little tomato,1.99,5,1.45,TRUE,2006,JAZZ
+Streamable,Music,Baby Shark,0.99,4,1.45,TRUE,2018,POP
+Streamable,Music,Joshua Tree,1.69,5,1.45,FALSE,1999,ROCK
+Streamable,Music,Beautiful Day,1.99,4.75,1.55,FALSE,2007,ROCK
+Streamable,Video,Inside Out,14.99,5,94,TRUE,2015,COMEDY
+Streamable,Video,Finding Nemo,14.99,5,100,FALSE,2003,COMEDY
+Streamable,Video,Moana,14.99,5,107,TRUE,2016,COMEDY
+Streamable,Music,Sympathique Album,22,5,47,FALSE,1999,ROCK
+Streamable,Music,Hey Eugene,1.77,5,1.45,TRUE,2015,ROCK
+Streamable,Music,City of Night,1.69,5,1.45,TRUE,2015,ROCK
+Streamable,Music,City of Night,1.69,4,1.45,TRUE,2015,ROCK
+Streamable,Video,Moana,14.99,2,107,TRUE,2016,COMEDY
+Streamable,Video,Psych,9.99,4,40,TRUE,2006,COMEDY
