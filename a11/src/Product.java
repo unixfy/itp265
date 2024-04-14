@@ -57,4 +57,12 @@ public abstract class Product implements Comparable<Product> {
         Product product = (Product) o;
         return Double.compare(getPrice(), product.getPrice()) == 0 && Double.compare(getRating(), product.getRating()) == 0 && Objects.equals(getName(), product.getName());
     }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(getName());
+        result = 31 * result + Double.hashCode(getPrice());
+        result = 31 * result + Double.hashCode(getRating());
+        return result;
+    }
 }
