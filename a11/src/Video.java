@@ -9,7 +9,7 @@
 public class Video extends StreamableProduct implements Rentable {
     private Genre genre;
 
-    public Video(String name, double price, double rating, boolean isIncludedWithPrime, double duration, int releaseYear, Genre genre) {
+    public Video(String name, double price, double rating, double duration, boolean isIncludedWithPrime, int releaseYear, Genre genre) {
         super(name, price, rating, isIncludedWithPrime, duration, releaseYear);
         this.genre = genre;
     }

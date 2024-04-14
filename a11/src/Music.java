@@ -9,7 +9,7 @@
 public class Music extends StreamableProduct {
     private MusicGenre musicGenre;
 
-    public Music(String name, double price, double rating, boolean isIncludedWithPrime, double duration, int releaseYear, MusicGenre musicGenre) {
+    public Music(String name, double price, double rating, double duration, boolean isIncludedWithPrime, int releaseYear, MusicGenre musicGenre) {
         super(name, price, rating, isIncludedWithPrime, duration, releaseYear);
         this.musicGenre = musicGenre;
     }
