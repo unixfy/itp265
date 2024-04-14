@@ -44,7 +44,7 @@ public abstract class StreamableProduct extends Product {
 
     @Override
     public String toString() {
-        String returnString = "Streamable" + getClass().getSimpleName();
+        String returnString = "Streamable " + getClass().getSimpleName();
         if (isIncludedWithPrime) {
             returnString += " (Included with Prime)";
         }

@@ -24,7 +24,7 @@ public class Video extends StreamableProduct implements Rentable {
 
     @Override
     public String toString() {
-        return super.toString() + ", genre: " + genre;
+        return super.toString() + ", genre: " + genre + ", rental price: $" + getRentalPrice();
     }
 
     @Override

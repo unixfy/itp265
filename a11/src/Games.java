@@ -25,6 +25,6 @@ public class Games extends Item {
 
     @Override
     public String toString() {
-        return super.toString() + ", description:" + description;
+        return super.toString() + ", description: " + description;
     }
 }

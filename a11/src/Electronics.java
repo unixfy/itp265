@@ -35,7 +35,7 @@ public class Electronics extends Item {
 
     @Override
     public String toString() {
-        return super.toString() + ", size:" + getSize() + ", weight:" + getWeight();
+        return super.toString() + ", size: " + getSize() + ", weight: " + getWeight();
     }
 }
 
