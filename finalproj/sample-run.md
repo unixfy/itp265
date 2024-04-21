@@ -1,6 +1,7 @@
 # A12 Sample Run
 
 ```
+(note: users were read from disk)
 Welcome to Alex's travel booking service.
 Do you want to log in, create an account, or exit?
 >> login
