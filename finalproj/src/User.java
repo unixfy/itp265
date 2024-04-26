@@ -55,6 +55,10 @@ public abstract class User {
         return this.password.equals(password);
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public boolean isBanned() {
         return banned;
     }

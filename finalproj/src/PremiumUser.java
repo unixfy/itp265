@@ -7,5 +7,7 @@
  */
 
 public class PremiumUser extends User implements IPaymentRequired {
-
+    public FreeUser downgrade() {
+        return new FreeUser(this.getUsername(), this.getPassword());
+    }
 }

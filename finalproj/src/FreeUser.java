@@ -6,4 +6,7 @@
  * Email: awang756@usc.edu
  */
 public class FreeUser extends User {
+    public PremiumUser upgrade() {
+        return new PremiumUser(this.getUsername(), this.getPassword());
+    }
 }

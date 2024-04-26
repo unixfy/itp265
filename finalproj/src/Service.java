@@ -6,4 +6,5 @@
  * Email: awang756@usc.edu
  */
 public abstract class Service {
+    public abstract void book();
 }
