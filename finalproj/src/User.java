@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * Represents a generic user
  *
@@ -10,16 +12,15 @@ public abstract class User {
     private int id;
     private String username;
     private String name;
-    private String email;
     private String password;
-    private String phone;
     private boolean banned;
 
-    public User(String name, String email, String password, String phone) {
+    public User(String name, String username, String password) {
+        Random random = new Random();
+        this.id = random.nextInt(1000000); // this should probably be safe to avoid collision...
+        this.username = username;
         this.name = name;
-        this.email = email;
         this.password = password;
-        this.phone = phone;
         this.banned = false;
     }
 
@@ -33,22 +34,6 @@ public abstract class User {
 
     public int getId() {
         return id;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public boolean verifyPassword(String password) {

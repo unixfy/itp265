@@ -6,7 +6,11 @@
  * Email: awang756@usc.edu
  */
 public class FreeUser extends User {
+    public FreeUser(String name, String username, String password) {
+        super(name, username, password);
+    }
+
     public PremiumUser upgrade() {
-        return new PremiumUser(this.getUsername(), this.getPassword());
+        return new PremiumUser(this.getName(), this.getUsername(), this.getPassword());
     }
 }

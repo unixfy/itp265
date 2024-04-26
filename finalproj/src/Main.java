@@ -77,6 +77,8 @@ public class Main {
             return;
         } else {
             // create a new user
+            String name = bff.inputWord("Enter your name: ");
+
             String password = bff.inputWord("Enter your password: ");
             String passwordConfirm = bff.inputWord("Confirm your password: ");
 
@@ -86,7 +88,7 @@ public class Main {
             }
 
             // instantiate new FreeUser
-            User newUser = new FreeUser(username, password);
+            User newUser = new FreeUser(name, username, password);
             this.userDatabase.put(username, newUser);
 
             this.currentUser = newUser;
@@ -132,7 +134,7 @@ public class Main {
 
             // user menu
             if (main.verifyUserLoggedIn()) {
-                printUserMenu();
+                main.printUserMenu();
                 int userChoice = bff.inputInt("Enter your choice: ", 1, 4);
 
                 switch (userChoice) {
