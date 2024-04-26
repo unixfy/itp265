@@ -156,6 +156,7 @@ public class Main {
                         break;
                     case 4:
                         // logout
+                        main.currentUser = null;
                         break;
                     case 5:
                         // upgrade/downgrade account
