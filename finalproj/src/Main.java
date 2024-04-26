@@ -106,7 +106,6 @@ public class Main {
 
     private boolean verifyUserLoggedIn() {
         if (currentUser == null) {
-            System.out.println("You must be logged in!");
             return false;
         } else {
             return true;
