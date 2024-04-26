@@ -38,13 +38,21 @@ public class Main {
     }
 
     private void printUserMenu() {
+        bff.print("Welcome back, " + currentUser.getName() + "!");
+        if (currentUser instanceof PremiumUser) {
+            bff.print("Thank you for being a premium user!");
+        }
         bff.print("Please choose an option:");
-        // if user is instanceof premium user, show a special thank you message
 
         bff.print("1. Book a service");
         bff.print("2. View your bookings");
         bff.print("3. Cancel a booking");
         bff.print("4. Logout");
+        bff.print("5. Upgrade/downgrade account");
+    }
+
+    private void transitionUserTier() {
+        // todo: allows user to transition between free and premium
     }
 
     private void userLogin() {
@@ -149,6 +157,10 @@ public class Main {
                         break;
                     case 4:
                         // logout
+                        break;
+                    case 5:
+                        // upgrade/downgrade account
+//                        main.transitionUserTier();
                         break;
                 }
 
