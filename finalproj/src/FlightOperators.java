@@ -11,7 +11,8 @@ public enum FlightOperators {
     UA("United Airlines"),
     AA("American Airlines"),
     B6("JetBlue Airways"),
-    WN("Southwest Airlines");
+    WN("Southwest Airlines"),
+    AC("Air Canada");
 
     private final String fullName;
 
