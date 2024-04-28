@@ -54,11 +54,17 @@ public class Main {
     private void transitionUserTier() {
         // allows user to transition between free and premium
         if (currentUser instanceof FreeUser) {
+            // drop the user from the database and re-add them as a premium user
+            userDatabase.remove(currentUser.getUsername());
             currentUser = ((FreeUser) currentUser).upgrade();
+            userDatabase.put(currentUser.getUsername(), currentUser);
             bff.print("Congratulations! You are now a premium user!");
             bff.print("The total cost of the upgrade is $" + ((PremiumUser) currentUser).getPrice() + ".");
         } else if (currentUser instanceof PremiumUser) {
+            // drop the user from the database and re-add them as a free user
+            userDatabase.remove(currentUser.getUsername());
             currentUser = ((PremiumUser) currentUser).downgrade();
+            userDatabase.put(currentUser.getUsername(), currentUser);
             bff.print("You are now a free user.");
         } else {
             bff.print("You're not eligible to use this function.");
