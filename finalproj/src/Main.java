@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Main {
-    private ArrayList<Service> bookingDatabase;
     private HashMap<User, ArrayList<Service>> userBookingMap;
     private HashMap<String, User> userDatabase;
     private static final BFF bff = new BFF();
@@ -19,8 +18,6 @@ public class Main {
 
     public Main() {
         // todo: logic to load users from file into userDatabase
-        // todo: logic to load services from file into bookingDatabase
-        this.bookingDatabase = new ArrayList<>();
         this.userBookingMap = new HashMap<>();
         this.userDatabase = new HashMap<>();
         this.currentUserBookingQueue = new ArrayList<>();
@@ -151,9 +148,13 @@ public class Main {
             boolean finalize = bff.inputYesNo("Enter 'yes' or 'no': ");
             if (finalize) {
                 // add all the bookings to the user's list of bookings
+                // make sure to create a new ArrayList if the user doesn't have any bookings yet
+                userBookingMap.computeIfAbsent(currentUser, k -> new ArrayList<>());
                 userBookingMap.get(currentUser).addAll(currentUserBookingQueue);
                 // clear the user's booking queue
                 currentUserBookingQueue.clear();
+
+                bff.print("Bookings finalized!");
             }
         }
     }
@@ -182,47 +183,66 @@ public class Main {
         bff.print("1: Flight");
         bff.print("2: Hotel");
         bff.print("3: Cruise");
-        bff.print("4: Rental Car");
 
         int serviceChoice = bff.inputInt("Enter the number of the service you would like to book: ", 1, 4);
 
-//        switch (serviceChoice) {
-//            case 1:
-//                // book a flight
-//                String flightNumber = bff.inputWord("Enter the flight number: ");
-//                String departureCity = bff.inputWord("Enter the departure city: ");
-//                String arrivalCity = bff.inputWord("Enter the arrival city: ");
-//                double price = bff.inputDouble("Enter the price: ");
-//                Flight newFlight = new Flight(flightNumber, departureCity, arrivalCity, price);
-//                currentUserBookingQueue.add(newFlight);
-//                break;
-//            case 2:
-//                // book a hotel
-//                String hotelName = bff.inputWord("Enter the hotel name: ");
-//                String city = bff.inputWord("Enter the city: ");
-//                int numRooms = bff.inputInt("Enter the number of rooms: ");
-//                double roomPrice = bff.inputDouble("Enter the price per room: ");
-//                Hotel newHotel = new Hotel(hotelName, city, numRooms, roomPrice);
-//                currentUserBookingQueue.add(newHotel);
-//                break;
-//            case 3:
-//                // book a cruise
-//                String cruiseName = bff.inputWord("Enter the cruise name: ");
-//                String departurePort = bff.inputWord("Enter the departure port: ");
-//                String arrivalPort = bff.inputWord("Enter the arrival port: ");
-//                double ticketPrice = bff.inputDouble("Enter the ticket price: ");
-//                Cruise newCruise = new Cruise(cruiseName, departurePort, arrivalPort, ticketPrice);
-//                currentUserBookingQueue.add(newCruise);
-//                break;
-//            case 4:
-//                // book a rental car
-//                String rentalCarCompany = bff.inputWord("Enter the rental car company: ");
-//                String carModel = bff.inputWord("Enter the car model: ");
-//                double dailyRate = bff.inputDouble("Enter the daily rate: ");
-//                RentalCar newRentalCar = new RentalCar(rentalCarCompany, carModel, dailyRate);
-//                currentUserBookingQueue.add(newRentalCar);
-//                break;
-//        }
+        switch (serviceChoice) {
+            case 1:
+                // book a flight
+
+                // allow user to select an operator
+                bff.print("These are the operators you may book a flight with.");
+                for (FlightOperators operator : FlightOperators.values()) {
+                    bff.print((operator.ordinal() + 1) + ": " + operator);
+                }
+
+                int operatorChoice = bff.inputInt("Enter the number of the operator you would like to book with: ", 1, FlightOperators.values().length);
+                FlightOperators operator = FlightOperators.values()[operatorChoice - 1];
+
+                String flightNumber = bff.inputWord("Enter the flight number: ");
+                String departureCity = bff.inputWord("Enter the departure airport: ");
+                String arrivalCity = bff.inputWord("Enter the arrival airport: ");
+                double price = bff.inputDouble("Enter the price: ");
+
+                // allow the user to select a fare class
+                bff.print("These are the fare classes you may book.");
+                for (FlightFareClasses fareClass : FlightFareClasses.values()) {
+                    bff.print((fareClass.ordinal() + 1) + ": " + fareClass);
+                }
+                int fareClassChoice = bff.inputInt("Enter the number of the fare class you would like to book: ", 1, FlightFareClasses.values().length);
+                FlightFareClasses fareClass = FlightFareClasses.values()[fareClassChoice - 1];
+
+                FlightBooking newFlight = new FlightBooking(operator, flightNumber, departureCity, arrivalCity, price, fareClass);
+                currentUserBookingQueue.add(newFlight);
+                newFlight.book();
+                break;
+            case 2:
+                // book a hotel
+                String city = bff.inputWord("Enter the city: ");
+                int numRooms = bff.inputInt("Enter the number of rooms: ");
+                double nightlyRate = bff.inputDouble("Enter the nightly rate: ");
+                int numNights = bff.inputInt("Enter the number of nights: ");
+                Hotel newHotel = new Hotel(numRooms, nightlyRate, numNights, city);
+
+                currentUserBookingQueue.add(newHotel);
+                newHotel.book();
+                break;
+            case 3:
+                // onlyl premium user can book a cruise
+                if (currentUser instanceof PremiumUser) {
+                    // book a cruise
+                    String cruiseName = bff.inputWord("Enter the cruise name: ");
+                    String departurePort = bff.inputWord("Enter the departure port: ");
+                    String arrivalPort = bff.inputWord("Enter the arrival port: ");
+                    double ticketPrice = bff.inputDouble("Enter the ticket price: ");
+                    Cruise newCruise = new Cruise(cruiseName, arrivalPort, departurePort, ticketPrice);
+                    currentUserBookingQueue.add(newCruise);
+                    newCruise.book();
+                } else {
+                    bff.print("You must be a premium user to book a cruise.");
+                }
+                break;
+        }
     }
 
     private void removeServiceFromBookingQueue() {
