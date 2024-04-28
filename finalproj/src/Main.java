@@ -52,7 +52,17 @@ public class Main {
     }
 
     private void transitionUserTier() {
-        // todo: allows user to transition between free and premium
+        // allows user to transition between free and premium
+        if (currentUser instanceof FreeUser) {
+            currentUser = ((FreeUser) currentUser).upgrade();
+            bff.print("Congratulations! You are now a premium user!");
+            bff.print("The total cost of the upgrade is $" + ((PremiumUser) currentUser).getPrice() + ".");
+        } else if (currentUser instanceof PremiumUser) {
+            currentUser = ((PremiumUser) currentUser).downgrade();
+            bff.print("You are now a free user.");
+        } else {
+            bff.print("You're not eligible to use this function.");
+        }
     }
 
     private void userLogin() {
