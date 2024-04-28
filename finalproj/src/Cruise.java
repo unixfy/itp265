@@ -6,5 +6,41 @@
  * Email: awang756@usc.edu
  */
 public class Cruise extends Service implements IPaymentRequired {
+    private String name;
+    private String destination;
+    private String origin;
+    private double totalPrice;
 
+    public Cruise(String name, String destination, String origin, double totalPrice) {
+        this.name = name;
+        this.destination = destination;
+        this.origin = origin;
+        this.totalPrice = totalPrice;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    @Override
+    public double getPrice() {
+        return totalPrice;
+    }
+
+    @Override
+    public void book() {
+        System.out.println("Booking cruise: " + name);
+    }
+
+    public String toString() {
+        return "Cruise operated by " + name + " from " + origin + " to " + destination + " for $" + totalPrice;
+    }
 }

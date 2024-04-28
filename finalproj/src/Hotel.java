@@ -10,4 +10,43 @@ public class Hotel extends Service implements IPaymentRequired {
     private double nightlyPrice;
     private int numberOfNights;
     private String location;
+
+    public Hotel(int numberOfRooms, double nightlyPrice, int numberOfNights, String location) {
+        super();
+        this.numberOfRooms = numberOfRooms;
+        this.nightlyPrice = nightlyPrice;
+        this.numberOfNights = numberOfNights;
+        this.location = location;
+    }
+
+    @Override
+    public double getPrice() {
+        return numberOfRooms * nightlyPrice * numberOfNights;
+    }
+
+    @Override
+    public void book() {
+        System.out.println("Booking hotel: " + this);
+    }
+
+    public int getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public double getNightlyPrice() {
+        return nightlyPrice;
+    }
+
+    public int getNumberOfNights() {
+        return numberOfNights;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    @Override
+    public String toString() {
+        return "Hotel at " + getLocation() + " for " + getNumberOfRooms() + " rooms for " + getNumberOfNights() + " nights at $" + getNightlyPrice() + " per night; total cost: $" + getPrice();
+    }
 }

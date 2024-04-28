@@ -7,6 +7,8 @@
  */
 
 public class PremiumUser extends User implements IPaymentRequired {
+    private final double PRICE = 9.99;
+
     public PremiumUser(String name, String username, String password) {
         super(name, username, password);
     }
@@ -17,6 +19,6 @@ public class PremiumUser extends User implements IPaymentRequired {
 
     @Override
     public double getPrice() {
-        return 0;
+        return this.PRICE;
     }
 }
