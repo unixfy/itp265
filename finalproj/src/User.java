@@ -48,4 +48,8 @@ public abstract class User {
         return banned;
     }
 
+    public void setBanned(boolean banned) {
+        this.banned = banned;
+    }
+
 }

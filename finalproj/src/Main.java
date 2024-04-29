@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Main {
-    private HashMap<User, ArrayList<Service>> userBookingMap;
-    private HashMap<String, User> userDatabase;
+    private final HashMap<User, ArrayList<Service>> userBookingMap;
+    private final HashMap<String, User> userDatabase;
     private static final BFF bff = new BFF();
     private User currentUser;
-    private ArrayList<Service> currentUserBookingQueue;
+    private final ArrayList<Service> currentUserBookingQueue;
 
     public Main() {
         // todo: logic to load users from file into userDatabase
@@ -46,6 +46,12 @@ public class Main {
         bff.print("5. Cancel previous booking");
         bff.print("6. Upgrade/downgrade account");
         bff.print("7. Logout");
+
+//        if the user is admin, show admin options
+        if (currentUser instanceof AdminUser) {
+            bff.print("8. Ban a user");
+            bff.print("9. Unban a user");
+        }
     }
 
     private void transitionUserTier() {
@@ -100,7 +106,6 @@ public class Main {
         // check if user already exists
         if (this.findUser(username) != null) {
             bff.print("User already exists!");
-            return;
         } else {
             // create a new user
             String name = bff.inputWord("Enter your name: ");
@@ -123,11 +128,7 @@ public class Main {
     }
 
     private boolean verifyUserLoggedIn() {
-        if (currentUser == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return currentUser != null;
     }
 
     private void quit() {
@@ -271,13 +272,33 @@ public class Main {
         }
     }
 
+    //    return true if the user is successfully banned
+    private boolean banUser(String username) {
+        if (userDatabase.get(username) != null) {
+            userDatabase.get(username).setBanned(true);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //    return true if the user is successfully unbanned
+    private boolean unbanUser(String username) {
+        if (userDatabase.get(username) != null) {
+            userDatabase.get(username).setBanned(false);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static void main(String[] args) {
         Main main = new Main();
         while (true) {
             // user menu
             if (main.verifyUserLoggedIn()) {
                 main.printUserMenu();
-                int userChoice = bff.inputInt("Enter your choice: ", 1, 7);
+                int userChoice = bff.inputInt("Enter your choice: ", 1, 9);
 
                 switch (userChoice) {
                     case 1:
@@ -302,6 +323,30 @@ public class Main {
                     case 7:
                         // logout
                         main.currentUser = null;
+                        break;
+                    case 8:
+                        if (main.currentUser instanceof AdminUser) {
+                            String targetUsername = bff.inputWord("Enter the username of the user you would like to ban: ");
+                            if (main.banUser(targetUsername)) {
+                                bff.print("User banned.");
+                            } else {
+                                bff.print("User not found.");
+                            }
+                        } else {
+                            bff.print("You're not an admin.");
+                        }
+                        break;
+                    case 9:
+                        if (main.currentUser instanceof AdminUser) {
+                            String targetUsername = bff.inputWord("Enter the username of the user you would like to unban: ");
+                            if (main.unbanUser(targetUsername)) {
+                                bff.print("User unbanned.");
+                            } else {
+                                bff.print("User not found.");
+                            }
+                        } else {
+                            bff.print("You're not an admin.");
+                        }
                         break;
                 }
 

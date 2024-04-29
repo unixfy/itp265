@@ -6,13 +6,8 @@
  * Email: awang756@usc.edu
  */
 public class AdminUser extends User {
-    private static banUser(int userID) {
-
+    public AdminUser(String name, String username, String password) {
+        super(name, username, password);
     }
-
-    private static deleteUser(int userID) {
-
-    }
-
-    }
+}
 
