@@ -10,6 +10,10 @@ public class FreeUser extends User {
         super(name, username, password);
     }
 
+    public FreeUser(int id, String name, String username, String password, boolean banned) {
+        super(id, name, username, password, banned);
+    }
+
     public PremiumUser upgrade() {
         return new PremiumUser(this.getName(), this.getUsername(), this.getPassword());
     }

@@ -13,6 +13,10 @@ public class PremiumUser extends User implements IPaymentRequired {
         super(name, username, password);
     }
 
+    public PremiumUser(int id, String name, String username, String password, boolean banned) {
+        super(id, name, username, password, banned);
+    }
+
     public FreeUser downgrade() {
         return new FreeUser(this.getName(), this.getUsername(), this.getPassword());
     }

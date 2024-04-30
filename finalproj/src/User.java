@@ -24,6 +24,14 @@ public abstract class User {
         this.banned = false;
     }
 
+    public User(int id, String name, String username, String password, boolean banned) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.password = password;
+        this.banned = banned;
+    }
+
     public String getUsername() {
         return username;
     }

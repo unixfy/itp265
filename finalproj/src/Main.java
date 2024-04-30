@@ -6,20 +6,97 @@
  * Email: awang756@usc.edu
  */
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Main {
-    private final HashMap<User, ArrayList<Service>> userBookingMap;
+    private final HashMap<String, ArrayList<Service>> userBookingMap;
     private final HashMap<String, User> userDatabase;
     private static final BFF bff = new BFF();
     private User currentUser;
     private final ArrayList<Service> currentUserBookingQueue;
 
     public Main() {
-        // todo: logic to load users from file into userDatabase
-        this.userBookingMap = new HashMap<>();
+        userBookingMap = new HashMap<>();
+        // logic to load user bookings from CSV file
+        try (FileInputStream userBookingMapFileInputStream = new FileInputStream("userBookingMap.csv")) {
+            Scanner scanner = new Scanner(userBookingMapFileInputStream);
+            while (scanner.hasNext()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+                String username = parts[0];
+                String[] services = parts[1].split(";");
+                ArrayList<Service> userServices = new ArrayList<>();
+                for (String service : services) {
+                    String[] serviceParts = service.split(":");
+                    String serviceType = serviceParts[0];
+                    switch (serviceType) {
+                        case "FlightBooking":
+                            // create a new Flight object based on the information in the CSV file
+                            // add the Flight object to the userServices ArrayList
+                            userServices.add(new FlightBooking(FlightOperators.valueOf(serviceParts[1]), serviceParts[2], serviceParts[3], serviceParts[4], Double.parseDouble(serviceParts[5]), FlightFareClasses.valueOf(serviceParts[6])));
+                            break;
+                        case "Hotel":
+                            // create a new Hotel object based on the information in the CSV file
+                            // add the Hotel object to the userServices ArrayList
+                            userServices.add(new Hotel(Integer.parseInt(serviceParts[1]), Double.parseDouble(serviceParts[2]), Integer.parseInt(serviceParts[3]), serviceParts[4]));
+                            break;
+                        case "Cruise":
+                            // create a new Cruise object based on the information in the CSV file
+                            // add the Cruise object to the userServices ArrayList
+                            userServices.add(new Cruise(serviceParts[1], serviceParts[2], serviceParts[3], Double.parseDouble(serviceParts[4])));
+                            break;
+                    }
+                }
+                // add the userServices ArrayList to the userBookingMap
+                userBookingMap.put(username, userServices);
+            }
+        } catch (IOException e) {
+            bff.print("Oops! Something went wrong while loading the userBookingMap.");
+        }
+
+        // do the same thing for the userDatabase
         this.userDatabase = new HashMap<>();
+        try (FileInputStream userDatabaseFileInputStream = new FileInputStream("userDatabase.csv")) {
+            Scanner scanner = new Scanner(userDatabaseFileInputStream);
+            while (scanner.hasNext()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+                int userId = Integer.parseInt(parts[0]);
+                String userType = parts[1];
+                String username = parts[2];
+                String name = parts[3];
+                String password = parts[4];
+                boolean isBanned = Boolean.parseBoolean(parts[5]);
+
+                // create a new user based on the information in the CSV file
+                // add the user to the userDatabase
+                switch (userType) {
+                    case "FreeUser":
+                        // create a new FreeUser based on the information in the CSV file
+                        // add the user to the userDatabase
+                        userDatabase.put(username, new FreeUser(userId, name, username, password, isBanned));
+                        break;
+                    case "PremiumUser":
+                        // create a new PremiumUser based on the information in the CSV file
+                        // add the user to the userDatabase
+                        userDatabase.put(username, new PremiumUser(userId, name, username, password, isBanned));
+                        break;
+                    case "AdminUser":
+                        // create a new AdminUser based on the information in the CSV file
+                        // add the user to the userDatabase
+//                        note that admins can't be banned
+                        userDatabase.put(username, new AdminUser(userId, name, username, password));
+                        break;
+                }
+            }
+        } catch (IOException e) {
+            bff.print("Oops! Something went wrong while loading the userDatabase.");
+        }
+
         this.currentUserBookingQueue = new ArrayList<>();
         this.currentUser = null;
     }
@@ -150,8 +227,8 @@ public class Main {
             if (finalize) {
                 // add all the bookings to the user's list of bookings
                 // make sure to create a new ArrayList if the user doesn't have any bookings yet
-                userBookingMap.computeIfAbsent(currentUser, k -> new ArrayList<>());
-                userBookingMap.get(currentUser).addAll(currentUserBookingQueue);
+                userBookingMap.computeIfAbsent(currentUser.getUsername(), k -> new ArrayList<>());
+                userBookingMap.get(currentUser.getUsername()).addAll(currentUserBookingQueue);
                 // clear the user's booking queue
                 currentUserBookingQueue.clear();
 
@@ -161,20 +238,20 @@ public class Main {
     }
 
     private void cancelBooking() {
-        if (userBookingMap.get(currentUser) == null || userBookingMap.get(currentUser).isEmpty()) {
+        if (userBookingMap.get(currentUser.getUsername()) == null || userBookingMap.get(currentUser.getUsername()).isEmpty()) {
             bff.print("You have no bookings to cancel.");
         } else {
             // list all of the user's bookings
             // user selects a booking to cancel
             // remove the booking from the user's list of bookings
             bff.print("These are the bookings you may cancel:");
-            for (int i = 0; i < userBookingMap.get(currentUser).size(); i++) {
-                bff.print((i + 1) + ". " + userBookingMap.get(currentUser).get(i).toString());
+            for (int i = 0; i < userBookingMap.get(currentUser.getUsername()).size(); i++) {
+                bff.print((i + 1) + ". " + userBookingMap.get(currentUser.getUsername()).get(i).toString());
             }
-            int cancellationTargetBooking = bff.inputInt("Enter the number of the booking you would like to cancel: ", 1, userBookingMap.get(currentUser).size());
+            int cancellationTargetBooking = bff.inputInt("Enter the number of the booking you would like to cancel: ", 1, userBookingMap.get(currentUser.getUsername()).size());
             // remove the booking from the user's list of bookings
             // note that ArrayList.remove automatically shifts everything to the left
-            userBookingMap.get(currentUser).remove(cancellationTargetBooking);
+            userBookingMap.get(currentUser.getUsername()).remove(cancellationTargetBooking);
         }
     }
 
@@ -262,12 +339,12 @@ public class Main {
     }
 
     private void showBookingHistory() {
-        if (userBookingMap.get(currentUser) == null || userBookingMap.get(currentUser).isEmpty()) {
+        if (userBookingMap.get(currentUser.getUsername()) == null || userBookingMap.get(currentUser.getUsername()).isEmpty()) {
             bff.print("You have no bookings.");
         } else {
             bff.print("These are your bookings:");
-            for (int i = 0; i < userBookingMap.get(currentUser).size(); i++) {
-                bff.print((i + 1) + ". " + userBookingMap.get(currentUser).get(i).toString());
+            for (int i = 0; i < userBookingMap.get(currentUser.getUsername()).size(); i++) {
+                bff.print((i + 1) + ". " + userBookingMap.get(currentUser.getUsername()).get(i).toString());
             }
         }
     }
