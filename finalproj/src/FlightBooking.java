@@ -11,14 +11,14 @@ public class FlightBooking extends Service implements IPaymentRequired {
     private String flightNumber;
     private String departureAirport;
     private String arrivalAirport;
-    private double price;
+    private double rawPrice;
 
-    public FlightBooking(FlightOperators operator, String flightNumber, String departureAirport, String arrivalAirport, double price, FlightFareClasses fareClass) {
+    public FlightBooking(FlightOperators operator, String flightNumber, String departureAirport, String arrivalAirport, double rawPrice, FlightFareClasses fareClass) {
         this.operator = operator;
         this.flightNumber = flightNumber;
         this.departureAirport = departureAirport;
         this.arrivalAirport = arrivalAirport;
-        this.price = price;
+        this.rawPrice = rawPrice;
         this.fareClass = fareClass;
     }
 
@@ -40,7 +40,11 @@ public class FlightBooking extends Service implements IPaymentRequired {
 
     @Override
     public double getPrice() {
-        return price * fareClass.getPriceMultiplier();
+        return rawPrice * fareClass.getPriceMultiplier();
+    }
+
+    public double getRawPrice() {
+        return rawPrice;
     }
 
     public FlightFareClasses getFareClass() {
@@ -53,6 +57,6 @@ public class FlightBooking extends Service implements IPaymentRequired {
     }
 
     public String toString() {
-        return "Flight " + getOperator() + " " + getFlightNumber() + " from " + getDepartureAirport() + " to " + getArrivalAirport() + " in " + fareClass + " class for $" + getPrice();
+        return "Flight " + getOperator() + " " + getFlightNumber() + " from " + getDepartureAirport() + " to " + getArrivalAirport() + " in " + fareClass + " class for total $" + getPrice();
     }
 }
