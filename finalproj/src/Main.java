@@ -54,6 +54,7 @@ public class Main {
                 // add the userServices ArrayList to the userBookingMap
                 userBookingMap.put(username, userServices);
             }
+            bff.print("Successfully loaded the userBookingMap.");
         } catch (IOException e) {
             bff.print("Oops! Something went wrong while loading the userBookingMap.");
         }
@@ -93,6 +94,8 @@ public class Main {
                         break;
                 }
             }
+
+            bff.print("Successfully loaded the userDatabase.");
         } catch (IOException e) {
             bff.print("Oops! Something went wrong while loading the userDatabase.");
         }
@@ -223,7 +226,7 @@ public class Main {
                     userBookingMapFileWriter.write(service.getClass().getSimpleName() + ":");
                     if (service instanceof FlightBooking) {
                         FlightBooking flight = (FlightBooking) service;
-                        userBookingMapFileWriter.write(flight.getOperator() + ":" + flight.getFlightNumber() + ":" + flight.getDepartureAirport() + ":" + flight.getArrivalAirport() + ":" + flight.getPrice() + ":" + flight.getFareClass() + ";");
+                        userBookingMapFileWriter.write(flight.getOperator().name() + ":" + flight.getFlightNumber() + ":" + flight.getDepartureAirport() + ":" + flight.getArrivalAirport() + ":" + flight.getPrice() + ":" + flight.getFareClass().name() + ";");
                     } else if (service instanceof Hotel) {
                         Hotel hotel = (Hotel) service;
                         userBookingMapFileWriter.write(hotel.getNumberOfRooms() + ":" + hotel.getNightlyPrice() + ":" + hotel.getNumberOfNights() + ":" + hotel.getLocation() + ";");
