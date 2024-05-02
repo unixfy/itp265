@@ -12,12 +12,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+@SuppressWarnings("PatternVariableCanBeUsed")
 public class Main {
+    private static final BFF bff = new BFF();
     private final HashMap<String, ArrayList<Service>> userBookingMap;
     private final HashMap<String, User> userDatabase;
-    private static final BFF bff = new BFF();
-    private User currentUser;
     private final ArrayList<Service> currentUserBookingQueue;
+    private User currentUser;
 
     public Main() {
         userBookingMap = new HashMap<>();
@@ -102,6 +103,81 @@ public class Main {
 
         this.currentUserBookingQueue = new ArrayList<>();
         this.currentUser = null;
+    }
+
+    public static void main(String[] args) {
+        Main main = new Main();
+        while (true) {
+            // user menu
+            if (main.verifyUserLoggedIn()) {
+                main.printUserMenu();
+                int userChoice = bff.inputInt("Enter your choice: ", 1, 9);
+
+                switch (userChoice) {
+                    case 1:
+                        main.addServicetoBookingQueue();
+                        break;
+                    case 2:
+                        main.processBookingOrder();
+                        break;
+                    case 3:
+                        main.removeServiceFromBookingQueue();
+                        break;
+                    case 4:
+                        // view booking history
+                        main.showBookingHistory();
+                        break;
+                    case 5:
+                        main.cancelBooking();
+                        break;
+                    case 6:
+                        main.transitionUserTier();
+                        break;
+                    case 7:
+                        // logout
+                        main.currentUser = null;
+                        break;
+                    case 8:
+                        if (main.currentUser instanceof AdminUser) {
+                            String targetUsername = bff.inputWord("Enter the username of the user you would like to ban: ");
+                            if (main.banUser(targetUsername)) {
+                                bff.print("User banned.");
+                            }
+                        } else {
+                            bff.print("You're not an admin.");
+                        }
+                        break;
+                    case 9:
+                        if (main.currentUser instanceof AdminUser) {
+                            String targetUsername = bff.inputWord("Enter the username of the user you would like to unban: ");
+                            if (main.unbanUser(targetUsername)) {
+                                bff.print("User unbanned.");
+                            }
+                        } else {
+                            bff.print("You're not an admin.");
+                        }
+                        break;
+                }
+
+            } else {
+                // authentication
+                main.printUserAuthMenu();
+
+                int choice = bff.inputInt("Enter your choice: ", 1, 3);
+
+                switch (choice) {
+                    case 1:
+                        main.userLogin();
+                        break;
+                    case 2:
+                        main.userRegister();
+                        break;
+                    case 3:
+                        main.quit();
+                        System.exit(0);
+                }
+            }
+        }
     }
 
     private void printUserAuthMenu() {
@@ -222,21 +298,21 @@ public class Main {
         try (java.io.FileWriter userBookingMapFileWriter = new java.io.FileWriter("userBookingMap.csv")) {
             for (String username : userBookingMap.keySet()) {
                 if (!userBookingMap.get(username).isEmpty()) {
-                userBookingMapFileWriter.write(username + ",");
-                for (Service service : userBookingMap.get(username)) {
-                    userBookingMapFileWriter.write(service.getClass().getSimpleName() + ":");
-                    if (service instanceof FlightBooking) {
-                        FlightBooking flight = (FlightBooking) service;
-                        userBookingMapFileWriter.write(flight.getOperator().name() + ":" + flight.getFlightNumber() + ":" + flight.getDepartureAirport() + ":" + flight.getArrivalAirport() + ":" + flight.getRawPrice() + ":" + flight.getFareClass().name() + ";");
-                    } else if (service instanceof Hotel) {
-                        Hotel hotel = (Hotel) service;
-                        userBookingMapFileWriter.write(hotel.getNumberOfRooms() + ":" + hotel.getNightlyPrice() + ":" + hotel.getNumberOfNights() + ":" + hotel.getLocation() + ";");
-                    } else if (service instanceof Cruise) {
-                        Cruise cruise = (Cruise) service;
-                        userBookingMapFileWriter.write(cruise.getName() + ":" + cruise.getDestination() + ":" + cruise.getOrigin() + ":" + cruise.getPrice() + ";");
+                    userBookingMapFileWriter.write(username + ",");
+                    for (Service service : userBookingMap.get(username)) {
+                        userBookingMapFileWriter.write(service.getClass().getSimpleName() + ":");
+                        if (service instanceof FlightBooking) {
+                            FlightBooking flight = (FlightBooking) service;
+                            userBookingMapFileWriter.write(flight.getOperator().name() + ":" + flight.getFlightNumber() + ":" + flight.getDepartureAirport() + ":" + flight.getArrivalAirport() + ":" + flight.getRawPrice() + ":" + flight.getFareClass().name() + ";");
+                        } else if (service instanceof Hotel) {
+                            Hotel hotel = (Hotel) service;
+                            userBookingMapFileWriter.write(hotel.getNumberOfRooms() + ":" + hotel.getNightlyPrice() + ":" + hotel.getNumberOfNights() + ":" + hotel.getLocation() + ";");
+                        } else if (service instanceof Cruise) {
+                            Cruise cruise = (Cruise) service;
+                            userBookingMapFileWriter.write(cruise.getName() + ":" + cruise.getDestination() + ":" + cruise.getOrigin() + ":" + cruise.getPrice() + ";");
+                        }
                     }
-                }
-                userBookingMapFileWriter.write("\n");
+                    userBookingMapFileWriter.write("\n");
                 }
             }
 
@@ -420,81 +496,6 @@ public class Main {
             return true;
         } else {
             return false;
-        }
-    }
-
-    public static void main(String[] args) {
-        Main main = new Main();
-        while (true) {
-            // user menu
-            if (main.verifyUserLoggedIn()) {
-                main.printUserMenu();
-                int userChoice = bff.inputInt("Enter your choice: ", 1, 9);
-
-                switch (userChoice) {
-                    case 1:
-                        main.addServicetoBookingQueue();
-                        break;
-                    case 2:
-                        main.processBookingOrder();
-                        break;
-                    case 3:
-                        main.removeServiceFromBookingQueue();
-                        break;
-                    case 4:
-                        // view booking history
-                        main.showBookingHistory();
-                        break;
-                    case 5:
-                        main.cancelBooking();
-                        break;
-                    case 6:
-                        main.transitionUserTier();
-                        break;
-                    case 7:
-                        // logout
-                        main.currentUser = null;
-                        break;
-                    case 8:
-                        if (main.currentUser instanceof AdminUser) {
-                            String targetUsername = bff.inputWord("Enter the username of the user you would like to ban: ");
-                            if (main.banUser(targetUsername)) {
-                                bff.print("User banned.");
-                            }
-                        } else {
-                            bff.print("You're not an admin.");
-                        }
-                        break;
-                    case 9:
-                        if (main.currentUser instanceof AdminUser) {
-                            String targetUsername = bff.inputWord("Enter the username of the user you would like to unban: ");
-                            if (main.unbanUser(targetUsername)) {
-                                bff.print("User unbanned.");
-                            }
-                        } else {
-                            bff.print("You're not an admin.");
-                        }
-                        break;
-                }
-
-            } else {
-                // authentication
-                main.printUserAuthMenu();
-
-                int choice = bff.inputInt("Enter your choice: ", 1, 3);
-
-                switch (choice) {
-                    case 1:
-                        main.userLogin();
-                        break;
-                    case 2:
-                        main.userRegister();
-                        break;
-                    case 3:
-                        main.quit();
-                        System.exit(0);
-                }
-            }
         }
     }
 }
