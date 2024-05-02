@@ -399,6 +399,7 @@ public class Main {
             userDatabase.get(username).setBanned(true);
             return true;
         } else {
+            bff.print("User not found.");
             return false;
         }
     }
@@ -450,8 +451,6 @@ public class Main {
                             String targetUsername = bff.inputWord("Enter the username of the user you would like to ban: ");
                             if (main.banUser(targetUsername)) {
                                 bff.print("User banned.");
-                            } else {
-                                bff.print("User not found.");
                             }
                         } else {
                             bff.print("You're not an admin.");
@@ -462,8 +461,6 @@ public class Main {
                             String targetUsername = bff.inputWord("Enter the username of the user you would like to unban: ");
                             if (main.unbanUser(targetUsername)) {
                                 bff.print("User unbanned.");
-                            } else {
-                                bff.print("User not found.");
                             }
                         } else {
                             bff.print("You're not an admin.");
