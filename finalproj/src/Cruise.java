@@ -37,7 +37,7 @@ public class Cruise extends Service implements IPaymentRequired {
 
     @Override
     public void book() {
-        System.out.println("Booking cruise: " + name);
+        System.out.println("Booking cruise: " + this);
     }
 
     public String toString() {
