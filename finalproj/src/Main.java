@@ -39,7 +39,7 @@ public class Main {
             // user menu
             if (main.verifyUserLoggedIn()) {
                 main.printUserMenu();
-                int userChoice = bff.inputInt("Enter your choice: ", 1, 9);
+                int userChoice = bff.inputInt("Enter your choice", 1, 9);
 
                 switch (userChoice) {
                     case 1:
@@ -67,7 +67,7 @@ public class Main {
                         break;
                     case 8:
                         if (main.currentUser instanceof AdminUser) {
-                            String targetUsername = bff.inputWord("Enter the username of the user you would like to ban: ");
+                            String targetUsername = bff.inputWord("Enter the username of the user you would like to ban");
                             if (main.banUser(targetUsername)) {
                                 bff.print("User banned.");
                             }
@@ -77,7 +77,7 @@ public class Main {
                         break;
                     case 9:
                         if (main.currentUser instanceof AdminUser) {
-                            String targetUsername = bff.inputWord("Enter the username of the user you would like to unban: ");
+                            String targetUsername = bff.inputWord("Enter the username of the user you would like to unban");
                             if (main.unbanUser(targetUsername)) {
                                 bff.print("User unbanned.");
                             }
@@ -91,7 +91,7 @@ public class Main {
                 // authentication
                 main.printUserAuthMenu();
 
-                int choice = bff.inputInt("Enter your choice: ", 1, 3);
+                int choice = bff.inputInt("Enter your choice", 1, 3);
 
                 switch (choice) {
                     case 1:
@@ -239,11 +239,11 @@ public class Main {
     }
 
     private void userLogin() {
-        String username = bff.inputWord("Enter your username: ");
+        String username = bff.inputWord("Enter your username");
 
         // if user exists, check if password is correct
         if (this.findUser(username) != null) {
-            String password = bff.inputWord("Enter your password: ");
+            String password = bff.inputWord("Enter your password");
 
             if (this.findUser(username).verifyPassword(password)) {
                 if (this.findUser(username).isBanned()) {
@@ -265,17 +265,17 @@ public class Main {
     }
 
     private void userRegister() {
-        String username = bff.inputWord("Enter your username: ");
+        String username = bff.inputWord("Enter your username");
 
         // check if user already exists
         if (this.findUser(username) != null) {
             bff.print("User already exists!");
         } else {
             // create a new user
-            String name = bff.inputWord("Enter your name: ");
+            String name = bff.inputWord("Enter your name");
 
-            String password = bff.inputWord("Enter your password: ");
-            String passwordConfirm = bff.inputWord("Confirm your password: ");
+            String password = bff.inputWord("Enter your password");
+            String passwordConfirm = bff.inputWord("Confirm your password");
 
             if (!password.equals(passwordConfirm)) {
                 bff.print("Passwords do not match!");
@@ -357,7 +357,7 @@ public class Main {
                 bff.print((i + 1) + ". " + currentUserBookingQueue.get(i).toString());
             }
             bff.print("Do you want to finalize all of these bookings?");
-            boolean finalize = bff.inputYesNo("Enter 'yes' or 'no': ");
+            boolean finalize = bff.inputYesNo("Enter 'yes' or 'no'");
             if (finalize) {
                 // add all the bookings to the user's list of bookings
                 // make sure to create a new ArrayList if the user doesn't have any bookings yet
@@ -382,7 +382,7 @@ public class Main {
             for (int i = 0; i < userBookingMap.get(currentUser.getUsername()).size(); i++) {
                 bff.print((i + 1) + ". " + userBookingMap.get(currentUser.getUsername()).get(i).toString());
             }
-            int cancellationTargetBooking = bff.inputInt("Enter the number of the booking you would like to cancel: ", 1, userBookingMap.get(currentUser.getUsername()).size());
+            int cancellationTargetBooking = bff.inputInt("Enter the number of the booking you would like to cancel", 1, userBookingMap.get(currentUser.getUsername()).size());
             // remove the booking from the user's list of bookings
             // note that ArrayList.remove automatically shifts everything to the left
             userBookingMap.get(currentUser.getUsername()).remove(cancellationTargetBooking - 1);
@@ -398,7 +398,7 @@ public class Main {
         bff.print("2: Hotel");
         bff.print("3: Cruise");
 
-        int serviceChoice = bff.inputInt("Enter the number of the service you would like to book: ", 1, 3);
+        int serviceChoice = bff.inputInt("Enter the number of the service you would like to book", 1, 3);
 
         switch (serviceChoice) {
             case 1:
@@ -417,10 +417,10 @@ public class Main {
         // onlyl premium user can book a cruise
         if (currentUser instanceof PremiumUser) {
             // book a cruise
-            String cruiseName = bff.inputWord("Enter the cruise operator's name: ");
-            String departurePort = bff.inputWord("Enter the departure port: ");
-            String arrivalPort = bff.inputWord("Enter the arrival port: ");
-            double ticketPrice = bff.inputDouble("Enter the ticket price: ");
+            String cruiseName = bff.inputWord("Enter the cruise operator's name");
+            String departurePort = bff.inputWord("Enter the departure port");
+            String arrivalPort = bff.inputWord("Enter the arrival port");
+            double ticketPrice = bff.inputDouble("Enter the ticket price");
             Cruise newCruise = new Cruise(cruiseName, arrivalPort, departurePort, ticketPrice);
             currentUserBookingQueue.add(newCruise);
             newCruise.book();
@@ -431,10 +431,10 @@ public class Main {
 
     private void bookHotel() {
         // book a hotel
-        String city = bff.inputWord("Enter the city: ");
-        int numRooms = bff.inputInt("Enter the number of rooms: ");
-        double nightlyRate = bff.inputDouble("Enter the nightly rate: ");
-        int numNights = bff.inputInt("Enter the number of nights: ");
+        String city = bff.inputWord("Enter the city");
+        int numRooms = bff.inputInt("Enter the number of rooms");
+        double nightlyRate = bff.inputDouble("Enter the nightly rate");
+        int numNights = bff.inputInt("Enter the number of nights");
         Hotel newHotel = new Hotel(numRooms, nightlyRate, numNights, city);
 
         currentUserBookingQueue.add(newHotel);
@@ -450,20 +450,20 @@ public class Main {
             bff.print((operator.ordinal() + 1) + ": " + operator);
         }
 
-        int operatorChoice = bff.inputInt("Enter the number of the operator you would like to book with: ", 1, FlightOperators.values().length);
+        int operatorChoice = bff.inputInt("Enter the number of the operator you would like to book with", 1, FlightOperators.values().length);
         FlightOperators operator = FlightOperators.values()[operatorChoice - 1];
 
-        String flightNumber = bff.inputWord("Enter the flight number: ");
-        String departureCity = bff.inputWord("Enter the departure airport: ");
-        String arrivalCity = bff.inputWord("Enter the arrival airport: ");
-        double price = bff.inputDouble("Enter the price: ");
+        String flightNumber = bff.inputWord("Enter the flight number");
+        String departureCity = bff.inputWord("Enter the departure airport");
+        String arrivalCity = bff.inputWord("Enter the arrival airport");
+        double price = bff.inputDouble("Enter the price");
 
         // allow the user to select a fare class
         bff.print("These are the fare classes you may book.");
         for (FlightFareClasses fareClass : FlightFareClasses.values()) {
             bff.print((fareClass.ordinal() + 1) + ": " + fareClass);
         }
-        int fareClassChoice = bff.inputInt("Enter the number of the fare class you would like to book: ", 1, FlightFareClasses.values().length);
+        int fareClassChoice = bff.inputInt("Enter the number of the fare class you would like to book", 1, FlightFareClasses.values().length);
         FlightFareClasses fareClass = FlightFareClasses.values()[fareClassChoice - 1];
 
         FlightBooking newFlight = new FlightBooking(operator, flightNumber, departureCity, arrivalCity, price, fareClass);
@@ -479,7 +479,7 @@ public class Main {
             for (int i = 0; i < currentUserBookingQueue.size(); i++) {
                 bff.print((i + 1) + ". " + currentUserBookingQueue.get(i).toString());
             }
-            int removalTargetBooking = bff.inputInt("Enter the number of the booking you would like to remove from your cart: ", 1, currentUserBookingQueue.size());
+            int removalTargetBooking = bff.inputInt("Enter the number of the booking you would like to remove from your cart", 1, currentUserBookingQueue.size());
             // remove the booking from the user's list of bookings
             // note that ArrayList.remove automatically shifts everything to the left
             currentUserBookingQueue.remove(removalTargetBooking - 1);
