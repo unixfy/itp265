@@ -221,12 +221,13 @@ public class Main {
 
         try (java.io.FileWriter userBookingMapFileWriter = new java.io.FileWriter("userBookingMap.csv")) {
             for (String username : userBookingMap.keySet()) {
+                if (!userBookingMap.get(username).isEmpty()) {
                 userBookingMapFileWriter.write(username + ",");
                 for (Service service : userBookingMap.get(username)) {
                     userBookingMapFileWriter.write(service.getClass().getSimpleName() + ":");
                     if (service instanceof FlightBooking) {
                         FlightBooking flight = (FlightBooking) service;
-                        userBookingMapFileWriter.write(flight.getOperator().name() + ":" + flight.getFlightNumber() + ":" + flight.getDepartureAirport() + ":" + flight.getArrivalAirport() + ":" + flight.getPrice() + ":" + flight.getFareClass().name() + ";");
+                        userBookingMapFileWriter.write(flight.getOperator().name() + ":" + flight.getFlightNumber() + ":" + flight.getDepartureAirport() + ":" + flight.getArrivalAirport() + ":" + flight.getRawPrice() + ":" + flight.getFareClass().name() + ";");
                     } else if (service instanceof Hotel) {
                         Hotel hotel = (Hotel) service;
                         userBookingMapFileWriter.write(hotel.getNumberOfRooms() + ":" + hotel.getNightlyPrice() + ":" + hotel.getNumberOfNights() + ":" + hotel.getLocation() + ";");
@@ -236,6 +237,7 @@ public class Main {
                     }
                 }
                 userBookingMapFileWriter.write("\n");
+                }
             }
 
             bff.print("Successfully saved the userBookingMap.");
@@ -296,7 +298,7 @@ public class Main {
             // note that ArrayList.remove automatically shifts everything to the left
             userBookingMap.get(currentUser.getUsername()).remove(cancellationTargetBooking - 1);
 
-            bff.print("Successfully cancelled this booking.")
+            bff.print("Successfully cancelled this booking.");
         }
     }
 
@@ -381,7 +383,7 @@ public class Main {
             // note that ArrayList.remove automatically shifts everything to the left
             currentUserBookingQueue.remove(removalTargetBooking - 1);
 
-            bff.print("Successfully removed this booking from your cart.")
+            bff.print("Successfully removed this booking from your cart.");
         }
     }
 
