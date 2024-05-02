@@ -6,10 +6,10 @@
  * Email: awang756@usc.edu
  */
 public class Cruise extends Service implements IPaymentRequired {
-    private String name;
-    private String destination;
-    private String origin;
-    private double totalPrice;
+    private final String name;
+    private final String destination;
+    private final String origin;
+    private final double totalPrice;
 
     public Cruise(String name, String destination, String origin, double totalPrice) {
         this.name = name;

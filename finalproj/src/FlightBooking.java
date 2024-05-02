@@ -6,12 +6,12 @@
  * Email: awang756@usc.edu
  */
 public class FlightBooking extends Service implements IPaymentRequired {
-    private FlightFareClasses fareClass;
-    private FlightOperators operator;
-    private String flightNumber;
-    private String departureAirport;
-    private String arrivalAirport;
-    private double rawPrice;
+    private final FlightFareClasses fareClass;
+    private final FlightOperators operator;
+    private final String flightNumber;
+    private final String departureAirport;
+    private final String arrivalAirport;
+    private final double rawPrice;
 
     public FlightBooking(FlightOperators operator, String flightNumber, String departureAirport, String arrivalAirport, double rawPrice, FlightFareClasses fareClass) {
         this.operator = operator;

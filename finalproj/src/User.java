@@ -9,10 +9,10 @@ import java.util.Random;
  */
 
 public abstract class User {
-    private int id;
-    private String username;
-    private String name;
-    private String password;
+    private final int id;
+    private final String username;
+    private final String name;
+    private final String password;
     private boolean banned;
 
     public User(String name, String username, String password) {

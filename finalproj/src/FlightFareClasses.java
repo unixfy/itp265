@@ -10,7 +10,7 @@ public enum FlightFareClasses {
     BUSINESS(1.5),
     FIRST(2.5);
 
-    private double priceMultiplier;
+    private final double priceMultiplier;
 
     FlightFareClasses(double priceMultiplier) {
         this.priceMultiplier = priceMultiplier;

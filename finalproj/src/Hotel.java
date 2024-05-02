@@ -6,10 +6,10 @@
  * Email: awang756@usc.edu
  */
 public class Hotel extends Service implements IPaymentRequired {
-    private int numberOfRooms;
-    private double nightlyPrice;
-    private int numberOfNights;
-    private String location;
+    private final int numberOfRooms;
+    private final double nightlyPrice;
+    private final int numberOfNights;
+    private final String location;
 
     public Hotel(int numberOfRooms, double nightlyPrice, int numberOfNights, String location) {
         super();

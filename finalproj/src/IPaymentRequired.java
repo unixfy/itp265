@@ -6,5 +6,5 @@
  * Email: awang756@usc.edu
  */
 public interface IPaymentRequired {
-    public double getPrice();
+    double getPrice();
 }
