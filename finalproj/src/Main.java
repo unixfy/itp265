@@ -392,6 +392,10 @@ public class Main {
     //    return true if the user is successfully banned
     private boolean banUser(String username) {
         if (userDatabase.get(username) != null) {
+            if (userDatabase.get(username) instanceof AdminUser) {
+                bff.print("You can't ban an admin!");
+                return false;
+            }
             userDatabase.get(username).setBanned(true);
             return true;
         } else {
