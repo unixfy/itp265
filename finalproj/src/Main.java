@@ -211,7 +211,47 @@ public class Main {
     private void quit() {
         bff.print("Goodbye!");
 
-        // todo: write everything to disk
+        // https://docs.oracle.com/javase/8/docs/api/java/io/FileWriter.html
+        // write to userBookingMap.csv
+        // same format as the CSV file we loaded in the constructor
+
+
+        try (java.io.FileWriter userBookingMapFileWriter = new java.io.FileWriter("userBookingMap.csv")) {
+            for (String username : userBookingMap.keySet()) {
+                userBookingMapFileWriter.write(username + ",");
+                for (Service service : userBookingMap.get(username)) {
+                    userBookingMapFileWriter.write(service.getClass().getSimpleName() + ":");
+                    if (service instanceof FlightBooking) {
+                        FlightBooking flight = (FlightBooking) service;
+                        userBookingMapFileWriter.write(flight.getOperator() + ":" + flight.getFlightNumber() + ":" + flight.getDepartureAirport() + ":" + flight.getArrivalAirport() + ":" + flight.getPrice() + ":" + flight.getFareClass() + ";");
+                    } else if (service instanceof Hotel) {
+                        Hotel hotel = (Hotel) service;
+                        userBookingMapFileWriter.write(hotel.getNumberOfRooms() + ":" + hotel.getNightlyPrice() + ":" + hotel.getNumberOfNights() + ":" + hotel.getLocation() + ";");
+                    } else if (service instanceof Cruise) {
+                        Cruise cruise = (Cruise) service;
+                        userBookingMapFileWriter.write(cruise.getName() + ":" + cruise.getDestination() + ":" + cruise.getOrigin() + ":" + cruise.getPrice() + ";");
+                    }
+                }
+                userBookingMapFileWriter.write("\n");
+            }
+
+            bff.print("Successfully saved the userBookingMap.");
+        } catch (IOException e) {
+            bff.print("Oops! Something went wrong while saving the userBookingMap.");
+        }
+
+        // write to userDatabase.csv
+        // use the same format as the CSV file we loaded in the constructor
+        try (java.io.FileWriter userDatabaseFileWriter = new java.io.FileWriter("userDatabase.csv")) {
+            for (String username : userDatabase.keySet()) {
+                User user = userDatabase.get(username);
+                userDatabaseFileWriter.write(user.getId() + "," + user.getClass().getSimpleName() + "," + user.getUsername() + "," + user.getName() + "," + user.getPassword() + "," + user.isBanned() + "\n");
+            }
+
+            bff.print("Successfully saved the userDatabase.");
+        } catch (IOException e) {
+            bff.print("Oops! Something went wrong while saving the userDatabase.");
+        }
     }
 
     private void processBookingOrder() {

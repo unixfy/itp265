@@ -43,6 +43,10 @@ public class FlightBooking extends Service implements IPaymentRequired {
         return price * fareClass.getPriceMultiplier();
     }
 
+    public FlightFareClasses getFareClass() {
+        return fareClass;
+    }
+
     @Override
     public void book() {
         System.out.println("Booking flight: " + this);
