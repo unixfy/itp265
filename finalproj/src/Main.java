@@ -294,7 +294,9 @@ public class Main {
             int cancellationTargetBooking = bff.inputInt("Enter the number of the booking you would like to cancel: ", 1, userBookingMap.get(currentUser.getUsername()).size());
             // remove the booking from the user's list of bookings
             // note that ArrayList.remove automatically shifts everything to the left
-            userBookingMap.get(currentUser.getUsername()).remove(cancellationTargetBooking);
+            userBookingMap.get(currentUser.getUsername()).remove(cancellationTargetBooking - 1);
+
+            bff.print("Successfully cancelled this booking.")
         }
     }
 
@@ -305,7 +307,7 @@ public class Main {
         bff.print("2: Hotel");
         bff.print("3: Cruise");
 
-        int serviceChoice = bff.inputInt("Enter the number of the service you would like to book: ", 1, 4);
+        int serviceChoice = bff.inputInt("Enter the number of the service you would like to book: ", 1, 3);
 
         switch (serviceChoice) {
             case 1:
@@ -352,7 +354,7 @@ public class Main {
                 // onlyl premium user can book a cruise
                 if (currentUser instanceof PremiumUser) {
                     // book a cruise
-                    String cruiseName = bff.inputWord("Enter the cruise name: ");
+                    String cruiseName = bff.inputWord("Enter the cruise operator's name: ");
                     String departurePort = bff.inputWord("Enter the departure port: ");
                     String arrivalPort = bff.inputWord("Enter the arrival port: ");
                     double ticketPrice = bff.inputDouble("Enter the ticket price: ");
@@ -374,10 +376,12 @@ public class Main {
             for (int i = 0; i < currentUserBookingQueue.size(); i++) {
                 bff.print((i + 1) + ". " + currentUserBookingQueue.get(i).toString());
             }
-            int removalTargetBooking = bff.inputInt("Enter the number of the booking you would like to remove: ", 1, currentUserBookingQueue.size());
+            int removalTargetBooking = bff.inputInt("Enter the number of the booking you would like to remove from your cart: ", 1, currentUserBookingQueue.size());
             // remove the booking from the user's list of bookings
             // note that ArrayList.remove automatically shifts everything to the left
-            currentUserBookingQueue.remove(removalTargetBooking);
+            currentUserBookingQueue.remove(removalTargetBooking - 1);
+
+            bff.print("Successfully removed this booking from your cart.")
         }
     }
 
